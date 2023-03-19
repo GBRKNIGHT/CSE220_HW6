@@ -1,5 +1,78 @@
 #include "hw6.h"
 
+
+// Function to find -s in an array of strings, return error (-999) if not found. 
+// If found, return the position of it. 
+int detect_dash_s(char* substrings[])
+{
+    int result = -999;
+    int size = sizeof(substrings);
+    for(int i = 0; i < size; i++)
+    {
+        if(strlen(substrings[i]) != 2)
+        {
+            // if length != 2, continue
+            continue;
+        }
+        char substring = substrings[i];
+        char* dash_s = "-s";
+        char* p_strstr = strstr(substring, dash_s);
+        if(p_strstr){
+            result = i;
+        }
+    }
+    return result;
+}
+
+// Function to find -r in an array of strings, return error (-999) if not found. 
+// If found, return the position of it. 
+int detect_dash_r(char* substrings[])
+{
+    int result = -999;
+    int size = sizeof(substrings);
+    for(int i = 0; i < size; i++)
+    {
+        if(strlen(substrings[i]) != 2)
+        {
+            // if length != 2, continue
+            continue;
+        }
+        char substring = substrings[i];
+        char* dash_s = "-r";
+        char* p_strstr = strstr(substring, dash_s);
+        if(p_strstr){
+            result = i;
+        }
+    }
+    return result;
+}
+
+
+// Function to find -w in an array of strings, return error (-999) if not found. 
+// If found, return the position of it. 
+int detect_dash_w(char* substrings[])
+{
+    int result = -999;
+    int size = sizeof(substrings);
+    for(int i = 0; i < size; i++)
+    {
+        if(strlen(substrings[i]) != 2)
+        {
+            // if length != 2, continue
+            continue;
+        }
+        char substring = substrings[i];
+        char* dash_s = "-w";
+        char* p_strstr = strstr(substring, dash_s);
+        if(p_strstr){
+            result = i;
+        }
+    }
+    return result;
+}
+
+
+// main function 
 int main(int argc, char *argv[]) {
     unsigned int argv_size = sizeof(argv);
     // if(argv_size < 7) {
@@ -17,9 +90,13 @@ int main(int argc, char *argv[]) {
                 num_space ++;
             }
         }
+        // if less than 7 substrings, return error code 1
         if(num_space < 7) {
             return 1;
         }
+        // if equal to 7, it will probably correct. 
+        if (num_space == 7)
+        {
         // split by found space indexs
         // find the length of each substrings. 
         int string_lengths[7] = {-555, -555, -555, -555, -555, -555, -555};
@@ -112,6 +189,13 @@ int main(int argc, char *argv[]) {
             c++;
         }
         substring_ptr++;
+        }
+        
+        // if greater than 7, we need to ignore irrelevant substirngs. 
+        if(num_space > 7)
+        {
+
+        }
     }
     return 0;
 }
