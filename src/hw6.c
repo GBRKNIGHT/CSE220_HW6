@@ -19,6 +19,7 @@ char** divide_line(char* input_line)
     return result; 
 }
 
+
 // Function to find -s in an array of strings, return error (-999) if not found. 
 // If found, return the position of it. 
 int detect_dash_s(char* substrings[])
@@ -46,6 +47,7 @@ int detect_dash_s(char* substrings[])
     }
     return result;
 }
+
 
 // Function to find -r in an array of strings, return error (-999) if not found. 
 // If found, return the position of it. 
@@ -104,6 +106,7 @@ int detect_dash_w(char* substrings[])
     return result;
 }
 
+
 // Function to find -l in an array of strings, return error (-999) if not found. 
 // If found, return the position of it. 
 int detect_dash_l(char* substrings[])
@@ -132,156 +135,241 @@ int detect_dash_l(char* substrings[])
     return result;
 }
 
-// main function 
-int main(int argc, char *argv[]) {
-    // unsigned int argv_size = sizeof(argv);
-    for(int i = 0; i < argc;i++){
-        char* line = argv[i];
-        if (line == NULL) 
-        {
-            return 1;
-        }
-        int length = strlen(line);
-        int num_space = 0;
-        // char** divided_line = divide_line(line);
-        // int spilit_len = sizeof(divided_line);
-        // free(spilit_len);
-        for(int j = 0; j < strlen(line); j++){
-            if(line[j] == ' '){
-                num_space ++;
-            }
-        }
-        // if less than 7 substrings, return error code 1
-        if(num_space < 6) {
-            return(1);
-        }
-        // if equal to 7, it will probably correct. 
-        if (num_space == 7)
-        {
-            int space_positions[7] = {-999, -999, -999, -999, -999, -999, -999};
-            for(int j = 0; j < length; j++){
-                if(line[j] == ' '){
-                    space_positions[num_space] = j;
-                    num_space ++;
-                }
-            }
-            // split by found space indexs
-            // find the length of each substrings. 
-            int string_lengths[7] = {-555, -555, -555, -555, -555, -555, -555};
-            for (int j = 0; j < sizeof(space_positions); j++){
-                string_lengths[j] = space_positions[j+1] - space_positions[j] - j;
-            }
+// deprecated main function 
+// // main function 
+// int main(int argc, char *argv[]) {
+//     // unsigned int argv_size = sizeof(argv);
+//     for(int i = 0; i < argc;i++){
+//         char* line = argv[i];
+//         if (line == NULL) 
+//         {
+//             return 1;
+//         }
+//         int length = strlen(line);
+//         int num_space = 0;
+//         // char** divided_line = divide_line(line);
+//         // int spilit_len = sizeof(divided_line);
+//         // free(spilit_len);
+//         for(int j = 0; j < strlen(line); j++){
+//             if(line[j] == ' '){
+//                 num_space ++;
+//             }
+//         }
+//         // if less than 7 substrings, return error code 1
+//         if(num_space < 6) {
+//             return(1);
+//         }
+//         // if equal to 7, it will probably correct. 
+//         if (num_space == 7)
+//         {
+//             int space_positions[7] = {-999, -999, -999, -999, -999, -999, -999};
+//             for(int j = 0; j < length; j++){
+//                 if(line[j] == ' '){
+//                     space_positions[num_space] = j;
+//                     num_space ++;
+//                 }
+//             }
+//             // split by found space indexs
+//             // find the length of each substrings. 
+//             int string_lengths[7] = {-555, -555, -555, -555, -555, -555, -555};
+//             for (int j = 0; j < sizeof(space_positions); j++){
+//                 string_lengths[j] = space_positions[j+1] - space_positions[j] - j;
+//             }
             
-            // int one_l = space_positions[1] - space_positions[0];
-            // find length
-            // int two_l = space_positions[2] - space_positions[1] - 1; 
-            // minus one after each iteration 
-            // int three_l = space_positions[3] - space_positions[2] - 2;
+//             // int one_l = space_positions[1] - space_positions[0];
+//             // find length
+//             // int two_l = space_positions[2] - space_positions[1] - 1; 
+//             // minus one after each iteration 
+//             // int three_l = space_positions[3] - space_positions[2] - 2;
 
-            // initialize strings with given lengths above. 
-            char* substring_0 = NULL;
-            substring_0 = (char*) calloc (string_lengths[0]+1, sizeof(char));
-            char* substring_1 = NULL;
-            substring_1 = (char*) calloc (string_lengths[1]+1, sizeof(char));
-            char* substring_2 = NULL;
-            substring_2 = (char*) calloc (string_lengths[2]+1, sizeof(char));
-            char* substring_3 = NULL;
-            substring_3 = (char*) calloc (string_lengths[3]+1, sizeof(char));
-            char* substring_4 = NULL;
-            substring_4 = (char*) calloc (string_lengths[4]+1, sizeof(char));
-            char* substring_5 = NULL;
-            substring_5 = (char*) calloc (string_lengths[5]+1, sizeof(char));
-            char* substring_6 = NULL;
-            substring_6 = (char*) calloc (string_lengths[6]+1, sizeof(char));
+//             // initialize strings with given lengths above. 
+//             char* substring_0 = NULL;
+//             substring_0 = (char*) calloc (string_lengths[0]+1, sizeof(char));
+//             char* substring_1 = NULL;
+//             substring_1 = (char*) calloc (string_lengths[1]+1, sizeof(char));
+//             char* substring_2 = NULL;
+//             substring_2 = (char*) calloc (string_lengths[2]+1, sizeof(char));
+//             char* substring_3 = NULL;
+//             substring_3 = (char*) calloc (string_lengths[3]+1, sizeof(char));
+//             char* substring_4 = NULL;
+//             substring_4 = (char*) calloc (string_lengths[4]+1, sizeof(char));
+//             char* substring_5 = NULL;
+//             substring_5 = (char*) calloc (string_lengths[5]+1, sizeof(char));
+//             char* substring_6 = NULL;
+//             substring_6 = (char*) calloc (string_lengths[6]+1, sizeof(char));
 
-            //store strings pters into an array. 
-            char* substrings[7] = {substring_0, substring_1, substring_2, substring_3, 
-            substring_4, substring_5, substring_6};
+//             //store strings pters into an array. 
+//             char* substrings[7] = {substring_0, substring_1, substring_2, substring_3, 
+//             substring_4, substring_5, substring_6};
 
-            // put original string into different substrings
-            // substr 0
-            int c = 0;
-            int substring_ptr = 0;
-            int count_char = 0;
-            while(count_char < string_lengths[0]){
-                substring_0[count_char] = line[c];
-                count_char++;
-                c++;
-            }
-            substring_ptr++;
-            //substr 1
-            c = space_positions[1] + 1;
-            count_char = 0;
-            while(count_char < string_lengths[1]){
-                substring_1[count_char] = line[c];
-                c++;
-            }
-            substring_ptr++;
-            //substr 2
-            c = space_positions[2] + 1;
-            count_char = 0;
-            while(count_char < string_lengths[2]){
-                substring_2[count_char] = line[c];
-                c++;
-            }
-            substring_ptr++;
-            //substr 3
-            c = space_positions[3] + 1;
-            count_char = 0;
-            while(count_char < string_lengths[3]){
-                substring_3[count_char] = line[c];
-                c++;
-            }
-            substring_ptr++;
-            //substr 4
-            c = space_positions[4] + 1;
-            count_char = 0;
-            while(count_char < string_lengths[4]){
-                substring_4[count_char] = line[c];
-                c++;
-            }
-            substring_ptr++;
-            //substr 5
-            c = space_positions[5] + 1;
-            count_char = 0;
-            while(count_char < string_lengths[4]){
-                substring_5[count_char] = line[c];
-                c++;
-            }
-            substring_ptr++;
-            //substr 6
-            c = space_positions[6] + 1;
-            count_char = 0;
-            while(count_char < string_lengths[4]){
-                substring_6[count_char] = line[c];
-                c++;
-            }
-            substring_ptr++;
+//             // put original string into different substrings
+//             // substr 0
+//             int c = 0;
+//             int substring_ptr = 0;
+//             int count_char = 0;
+//             while(count_char < string_lengths[0]){
+//                 substring_0[count_char] = line[c];
+//                 count_char++;
+//                 c++;
+//             }
+//             substring_ptr++;
+//             //substr 1
+//             c = space_positions[1] + 1;
+//             count_char = 0;
+//             while(count_char < string_lengths[1]){
+//                 substring_1[count_char] = line[c];
+//                 c++;
+//             }
+//             substring_ptr++;
+//             //substr 2
+//             c = space_positions[2] + 1;
+//             count_char = 0;
+//             while(count_char < string_lengths[2]){
+//                 substring_2[count_char] = line[c];
+//                 c++;
+//             }
+//             substring_ptr++;
+//             //substr 3
+//             c = space_positions[3] + 1;
+//             count_char = 0;
+//             while(count_char < string_lengths[3]){
+//                 substring_3[count_char] = line[c];
+//                 c++;
+//             }
+//             substring_ptr++;
+//             //substr 4
+//             c = space_positions[4] + 1;
+//             count_char = 0;
+//             while(count_char < string_lengths[4]){
+//                 substring_4[count_char] = line[c];
+//                 c++;
+//             }
+//             substring_ptr++;
+//             //substr 5
+//             c = space_positions[5] + 1;
+//             count_char = 0;
+//             while(count_char < string_lengths[4]){
+//                 substring_5[count_char] = line[c];
+//                 c++;
+//             }
+//             substring_ptr++;
+//             //substr 6
+//             c = space_positions[6] + 1;
+//             count_char = 0;
+//             while(count_char < string_lengths[4]){
+//                 substring_6[count_char] = line[c];
+//                 c++;
+//             }
+//             substring_ptr++;
 
-            // detect the DUPLICATE_ARGUMENT
-            if(detect_dash_s(substrings) == -888) return 2;
-            if(detect_dash_l(substrings) == -888) return 2;
-            if(detect_dash_r(substrings) == -888) return 2;
+//             // detect the DUPLICATE_ARGUMENT
+//             if(detect_dash_s(substrings) == -888) return 2;
+//             if(detect_dash_l(substrings) == -888) return 2;
+//             if(detect_dash_r(substrings) == -888) return 2;
+//             if(detect_dash_w(substrings) == -888) return 2;
 
-            // find the location of -s, -r and -l. 
-            int loc_dashS = detect_dash_s(substrings);
-            int loc_dashR = detect_dash_r(substrings);
-            int loc_dashL = detect_dash_l(substrings);
+//             // find the location of -s, -r and -l. 
+//             int loc_dashS = detect_dash_s(substrings);
+//             int loc_dashR = detect_dash_r(substrings);
+//             int loc_dashL = detect_dash_l(substrings);
+//             int loc_dashW = detect_dash_w(substrings);
 
 
-        }
+//         }
         
-        // if greater than 7, we need to ignore irrelevant substirngs. 
-        if(num_space > 7)
-        {
-            char** divided_line = divide_line(line);
-            for(long unsigned int j = 0; j < sizeof(divided_line); j++)
-            {
-                // insert other codes here. Use the algorithm wrote above. s
-                free(divided_line[j]);
-            }
-            free(divide_line);
-        }
+//         // if greater than 7, we need to ignore irrelevant substirngs. 
+//         if(num_space > 7)
+//         {
+//             char** divided_line = divide_line(line);
+//             for(long unsigned int j = 0; j < sizeof(divided_line); j++)
+//             {
+//                 // insert other codes here. Use the algorithm wrote above. s
+//                 free(divided_line[j]);
+//             }
+//             free(divide_line);
+//         }
+//     }
+//     return 0;
+// }
+
+
+
+// following code copied from the instruction site, and modified by me. 
+/*
+	example of command line parsing via getopt
+	usage: getopt [-dmp] -f fname [-s sname] name [name ...]
+
+	Paul Krzyzanowski
+*/
+
+
+int main(int argc, char **argv)
+{
+    for(int i = 0; i < argc;i++)
+    {
+    char* line = argv[i];
+    if (line == NULL) 
+    {
+        return MISSING_ARGUMENT;
     }
-    return 0;
+    int length = strlen(line);
+    int num_space = 0;
+    }
+	extern char *optarg;
+	extern int optind;
+	int c, err = 0; 
+	int s_flag=0, l_flag = 0, r_flag=0, w_flag=0, debug = 0;
+	char *sname = "default_sname", *lname;
+	static char usage[] = "usage: %s [-srl] -l lname [-s sname] name [name ...]\n";
+
+	while ((c = getopt(argc, argv, "srl:d")) != -1){
+		switch (c) {
+			case 's':
+				s_flag = 1;
+				break;
+			case 'r':
+				r_flag = 1;
+				break;
+			case 'l':
+				l_flag = 1;
+				lname = optarg;
+				break;
+			case 'd':
+				debug = 1;
+				break;
+			case '?':
+				err = 1;
+				break;
+		}
+    }
+	if (l_flag == 0) {	/* -f was mandatory */
+		fprintf(stderr, "%s: missing -f option\n", argv[0]);
+		fprintf(stderr, usage, argv[0]);
+		return MISSING_ARGUMENT;
+	} else if ((optind+1) > argc) {	
+		/* need at least one argument (change +1 to +2 for two, etc. as needeed) */
+
+		printf("optind = %d, argc=%d\n", optind, argc);
+		fprintf(stderr, "%s: missing name\n", argv[0]);
+		fprintf(stderr, usage, argv[0]);
+		exit(1);
+	} else if (err) {
+		fprintf(stderr, usage, argv[0]);
+		exit(1);
+	}
+	/* see what we have */
+	printf("debug = %d\n", debug);
+	printf("sflag = %d\n", s_flag);
+	printf("lflag = %d\n", l_flag);
+    printf("rflag = %d\n", r_flag);
+	printf("lname = \"%s\"\n", lname);
+	printf("sname = \"%s\"\n", sname);
+	
+	if (optind < argc)	
+		for (; optind < argc; optind++)
+			printf("argument: \"%s\"\n", argv[optind]);
+	else {
+		printf("no arguments left to process\n");
+	}
+	exit(0);
 }
