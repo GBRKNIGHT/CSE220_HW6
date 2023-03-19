@@ -25,6 +25,7 @@ int detect_dash_s(char* substrings[])
 {
     int result = -999;
     int size = sizeof(substrings);
+    int occur_signal = 0;
     for(int i = 0; i < size; i++)
     {
         if(strlen(substrings[i]) != 2)
@@ -36,7 +37,11 @@ int detect_dash_s(char* substrings[])
         char* dash_s = "-s";
         char* p_strstr = strstr(substring, dash_s);
         if(p_strstr){
+            occur_signal ++;
             result = i;
+        }
+        if(occur_signal > 1){
+            return -888; // return -888 if DUPLICATE_ARGUMENT
         }
     }
     return result;
@@ -48,6 +53,7 @@ int detect_dash_r(char* substrings[])
 {
     int result = -999;
     int size = sizeof(substrings);
+    int occur_signal = 0;
     for(int i = 0; i < size; i++)
     {
         if(strlen(substrings[i]) != 2)
@@ -60,7 +66,11 @@ int detect_dash_r(char* substrings[])
         char* p_strstr = strstr(substring, dash_s);
         if(p_strstr){
             result = i;
+            occur_signal ++;
         }
+        if(occur_signal > 1){
+            return -888; // return -888 if DUPLICATE_ARGUMENT
+        }       
     }
     return result;
 }
@@ -72,6 +82,7 @@ int detect_dash_w(char* substrings[])
 {
     int result = -999;
     int size = sizeof(substrings);
+    int occur_signal = 0;
     for(int i = 0; i < size; i++)
     {
         if(strlen(substrings[i]) != 2)
@@ -84,11 +95,42 @@ int detect_dash_w(char* substrings[])
         char* p_strstr = strstr(substring, dash_s);
         if(p_strstr){
             result = i;
+            occur_signal++;
+        }
+        if(occur_signal > 1){
+            return -888; // return -888 if DUPLICATE_ARGUMENT
         }
     }
     return result;
 }
 
+// Function to find -l in an array of strings, return error (-999) if not found. 
+// If found, return the position of it. 
+int detect_dash_l(char* substrings[])
+{
+    int result = -999;
+    int size = sizeof(substrings);
+    int occur_signal = 0;
+    for(int i = 0; i < size; i++)
+    {
+        if(strlen(substrings[i]) != 2)
+        {
+            // if length != 2, continue
+            continue;
+        }
+        char* substring = substrings[i];
+        char* dash_s = "-l";
+        char* p_strstr = strstr(substring, dash_s);
+        if(p_strstr){
+            result = i;
+            occur_signal++;
+        }
+        if(occur_signal > 1){
+            return -888; // return -888 if DUPLICATE_ARGUMENT
+        }
+    }
+    return result;
+}
 
 // main function 
 int main(int argc, char *argv[]) {
@@ -215,6 +257,18 @@ int main(int argc, char *argv[]) {
                 c++;
             }
             substring_ptr++;
+
+            // detect the DUPLICATE_ARGUMENT
+            if(detect_dash_s(substrings) == -888) return 2;
+            if(detect_dash_l(substrings) == -888) return 2;
+            if(detect_dash_r(substrings) == -888) return 2;
+
+            // find the location of -s, -r and -l. 
+            int loc_dashS = detect_dash_s(substrings);
+            int loc_dashR = detect_dash_r(substrings);
+            int loc_dashL = detect_dash_l(substrings);
+
+
         }
         
         // if greater than 7, we need to ignore irrelevant substirngs. 
