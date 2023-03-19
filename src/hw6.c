@@ -149,11 +149,12 @@ int main(int argc, char **argv)
 {
     for(int i = 0; i < argc;i++)
     {
-    char* line = argv[i];
+    char* line = argv[0];
     if (line == NULL) 
     {
         return MISSING_ARGUMENT;
     }
+    
     int length = strlen(line);
     int num_space = 0;
     }
@@ -162,7 +163,7 @@ int main(int argc, char **argv)
 	int c, err = 0; 
 	int s_flag=0, l_flag = 0, r_flag=0, w_flag=0, debug = 0;
 	char *sname = "default_sname", *lname;
-	static char usage[] = "usage: %s [-srl] -l lname [-s sname] name [name ...]\n";
+	static char usage[] = "usage: %s [-srl] -s sname -r rname -l lname [-s sname] name [name ...]\n";
     int s_check = 0;
     int r_check = 0;
     int l_check = 0;
@@ -179,8 +180,7 @@ int main(int argc, char **argv)
                 r_check ++;
                 r_flag = 1;
 				break;
-            }
-				
+            }	
 			case 'l':
             {
                 l_check++;
@@ -188,7 +188,6 @@ int main(int argc, char **argv)
 				lname = optarg;
 				break;
             }
-				
 			case 'd':
 				debug = 1;
 				break;
@@ -198,6 +197,9 @@ int main(int argc, char **argv)
 		}
     }
     if ((optind+7) > argc) {	
+        // change here will cause valgrind errors. and then go to line 222. 
+
+        // ALWAYS GOES HERE, WHY???
         /* need at least seven argument,  */
         return MISSING_ARGUMENT; // MISSING_ARGUMENT if less than 7. 
     }
@@ -210,39 +212,62 @@ int main(int argc, char **argv)
     if(l_check > 1){
         return DUPLICATE_ARGUMENT;
     }
-	if (l_flag == 0) {	// check -l
-		fprintf(stderr, "%s: missing -l option\n", argv[0]);
+    char* line = argv;
+    char** divided_line = divide_line(line);
+
+    // goes here 
+    // input and output files are in the end of the command, so we can retrieve it. 
+    char* input_file = divided_line[sizeof(divide_line) - 1];
+    char* output_file = divided_line[sizeof(divide_line)];
+    char* input_strstr = strstr(input_file, ".txt");
+    if(input_strstr == 0){
+        return INPUT_FILE_MISSING;
+    }
+    char* output_strstr = strstr(output_file, ".txt");
+    if(output_strstr == 0){
+        return OUTPUT_FILE_UNWRITABLE;
+    }
+    free(divide_line);
+    // detect for 's
+    if (s_flag == 0){
+        fprintf(stderr, "%s: missing -s option\n", argv[0]);
 		fprintf(stderr, usage, argv[0]);
-		return L_ARGUMENT_INVALID;
-	} 
+		return S_ARGUMENT_MISSING;
+    }
+	//detect for -r
     else if (r_flag == 0){ // check -r
         fprintf(stderr, "%s: missing -r option\n", argv[0]);
 		fprintf(stderr, usage, argv[0]);
 		return R_ARGUMENT_MISSING;
     }
-    else if (s_flag == 0){
-        fprintf(stderr, "%s: missing -s option\n", argv[0]);
+    //detect for -l
+    else if (l_flag == 0) {	// check -l
+		fprintf(stderr, "%s: missing -l option\n", argv[0]);
 		fprintf(stderr, usage, argv[0]);
-		return S_ARGUMENT_MISSING;
-    }
+		return L_ARGUMENT_INVALID;
+	} 
 
     else if (err) {
-		fprintf(stderr, usage, argv[0]);
-		exit(1);
-	}
+    	fprintf(stderr, usage, argv[0]);
+    	exit(1);
+    }
 	/* see what we have */
-	printf("debug = %d\n", debug);
-	printf("sflag = %d\n", s_flag);
-	printf("lflag = %d\n", l_flag);
-    printf("rflag = %d\n", r_flag);
-	printf("lname = \"%s\"\n", lname);
-	printf("sname = \"%s\"\n", sname);
+	// printf("debug = %d\n", debug);
+	// printf("sflag = %d\n", s_flag);
+	// printf("lflag = %d\n", l_flag);
+    // printf("rflag = %d\n", r_flag);
+	// printf("lname = \"%s\"\n", lname);
+
 	
-	if (optind < argc)	
-		for (; optind < argc; optind++)
-			printf("argument: \"%s\"\n", argv[optind]);
+	if (optind < argc)	{
+
+        for (; optind < argc; optind++){
+            printf("argument: \"%s\"\n", argv[optind]);
+        }
+    }	
 	else {
 		printf("no arguments left to process\n");
 	}
-	exit(0);
+    
+	// exit(0);
 }
