@@ -149,7 +149,7 @@ int main(int argc, char **argv)
 {
     for(int i = 0; i < argc;i++)
     {
-    char* line = argv[0];
+    char* line = argv[i];
     if (line == NULL) 
     {
         return MISSING_ARGUMENT;
@@ -162,12 +162,14 @@ int main(int argc, char **argv)
 	extern int optind;
 	int c, err = 0; 
 	int s_flag=0, l_flag = 0, r_flag=0, w_flag=0, debug = 0;
-	char *sname = "default_sname", *lname;
-	static char usage[] = "usage: %s [-srl] -s sname -r rname -l lname [-s sname] name [name ...]\n";
+	char *sname = "default_sname";
+    char *rname = "default_rname";
+    char *lname = "default_lname";
+	static char usage[] = "usage: %s [-srl] [-s]sname [-r] rname [-l] lname [input_name] [output_name]\n";
     int s_check = 0;
     int r_check = 0;
     int l_check = 0;
-	while ((c = getopt(argc, argv, "srl:d")) != -1){
+	while ((c = getopt(argc, argv, "s:r:l:")) != -1){
 		switch (c) {
 			case 's':
             {
@@ -184,16 +186,17 @@ int main(int argc, char **argv)
 			case 'l':
             {
                 l_check++;
+                lname =
                 l_flag = 1;
-				lname = optarg;
 				break;
             }
 			case 'd':
 				debug = 1;
 				break;
-			case '?':
-				err = 1;
-				break;
+            default: 
+                err = 1;
+                exit(err);
+                break;
 		}
     }
     if ((optind+7) > argc) {	
