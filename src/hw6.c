@@ -175,12 +175,14 @@ int main(int argc, char **argv)
     int l_check = 0;
     int i_check = 0;
     int o_check = 0;
-	while ((c = getopt(argc, argv, "s:r:l:io")) != -1){
+    int w_check = 0;
+	while ((c = getopt(argc, argv, "s:r:wl:io")) != -1){
         // s: -s, r:-r, l:-l, i: input file, o:output file
 
 		switch (c) {
 			case 's':
             {
+                // sname
                 s_check ++;
 				s_flag = 1;
                 sname = optarg;
@@ -188,11 +190,17 @@ int main(int argc, char **argv)
             }
 			case 'r':
             {
+                //rname
                 r_check ++;
                 r_flag = 1;
                 rname = optarg;
 				break;
             }	
+
+            case 'w':{
+                w_check ++;
+                break;
+            }
 			case 'l':
             {
                 l_check++;
@@ -205,13 +213,22 @@ int main(int argc, char **argv)
 				break;
             }
             case 'i':{
-                iname = optarg;
+                *iname = argv[optind];
+                // second last argument
                 i_check++;
                 break;
             }
             case 'o':{
-                oname = optarg;
+                *oname = argv [optind + 1];
+                // last argument
+                // argv[argc] will be NULL. 
                 o_check++;
+                break;
+            }
+            case ':':{
+                //error part
+                err = 1;
+                exit(err);
                 break;
             }
             default: 
@@ -223,7 +240,6 @@ int main(int argc, char **argv)
     }
     if ((optind+3) > argc) {	
         // change here will cause valgrind errors. and then go to line 226. 
-        // 3 required output, so +3 maybe correct. 
         // ALWAYS GOES HERE, WHY???
         /* need at least seven argument,  */
         return MISSING_ARGUMENT; // MISSING_ARGUMENT if less than 7. 
@@ -244,6 +260,14 @@ int main(int argc, char **argv)
     // if(o_check == 0){
     //     return OUTPUT_FILE_UNWRITABLE;
     // }
+    if(iname[0] == ' '){
+        return INPUT_FILE_MISSING;
+    }
+    if(oname[0] == ' '){
+        return OUTPUT_FILE_UNWRITABLE;
+    }
+    puts(iname);
+    puts(oname);
     if(sname[0] == '-'){
         return S_ARGUMENT_MISSING;
     }
