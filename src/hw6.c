@@ -240,19 +240,19 @@ int main(int argc, char **argv)
 				debug = 1;
 				break;
             }
-            case 'i':{
-                *iname = argv[optind];
-                // second last argument
-                i_check++;
-                break;
-            }
-            case 'o':{
-                *oname = argv [optind + 1];
-                // last argument
-                // argv[argc] will be NULL. 
-                o_check++;
-                break;
-            }
+            // case 'i':{
+            //     *iname = argv[optind];
+            //     // second last argument
+            //     i_check++;
+            //     break;
+            // }
+            // case 'o':{
+            //     *oname = argv [optind + 1];
+            //     // last argument
+            //     // argv[argc] will be NULL. 
+            //     o_check++;
+            //     break;
+            // }
             case ':':{
                 //error part
                 err = 1;
@@ -266,7 +266,7 @@ int main(int argc, char **argv)
 		}
 
     }
-    if(argc<7){
+    if(argc < 7){
         return MISSING_ARGUMENT;
     }
     if ((optind+3) > argc) {	
@@ -291,12 +291,7 @@ int main(int argc, char **argv)
     // if(o_check == 0){
     //     return OUTPUT_FILE_UNWRITABLE;
     // }
-    if(iname[0] == ' '){
-        return INPUT_FILE_MISSING;
-    }
-    if(oname[0] == ' '){
-        return OUTPUT_FILE_UNWRITABLE;
-    }
+    
     // puts(iname);
     // puts(oname);
     if(sname[0] == '-'){
@@ -312,7 +307,20 @@ int main(int argc, char **argv)
 
     // -w missing, do it later. 
 
-
+    *iname = argv[argc - 2];
+    // second last argument
+    i_check++;
+    *oname = argv [argc - 1];
+    // last argument
+    // argv[argc] will be NULL. 
+    o_check++;
+    if(iname[0] == '-'){
+        return INPUT_FILE_MISSING;
+    }
+    if(oname[0] == '-'){
+        return OUTPUT_FILE_UNWRITABLE;
+    }
+                
     char* line = argv; //
     char** divided_line = divide_line(line);
 
