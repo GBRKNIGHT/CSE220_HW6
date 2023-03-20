@@ -152,56 +152,78 @@ int main(int argc, char **argv)
     char* line = argv[i];
     if (line == NULL) 
     {
+        
         return MISSING_ARGUMENT;
     }
     
-    int length = strlen(line);
-    int num_space = 0;
+    // int length = strlen(line);
+    // int num_space = 0;
     }
 	extern char *optarg;
 	extern int optind;
 	int c, err = 0; 
 	int s_flag=0, l_flag = 0, r_flag=0, w_flag=0, debug = 0;
+
 	char *sname = "default_sname";
     char *rname = "default_rname";
     char *lname = "default_lname";
+    char *iname = "default_iname";
+    char *oname = "default_oname";
 	static char usage[] = "usage: %s [-srl] [-s]sname [-r] rname [-l] lname [input_name] [output_name]\n";
     int s_check = 0;
     int r_check = 0;
     int l_check = 0;
-	while ((c = getopt(argc, argv, "s:r:l:")) != -1){
+    int i_check = 0;
+    int o_check = 0;
+	while ((c = getopt(argc, argv, "s:r:l:io")) != -1){
+        // s: -s, r:-r, l:-l, i: input file, o:output file
+
 		switch (c) {
 			case 's':
             {
                 s_check ++;
 				s_flag = 1;
+                sname = optarg;
 				break;
             }
 			case 'r':
             {
                 r_check ++;
                 r_flag = 1;
+                rname = optarg;
 				break;
             }	
 			case 'l':
             {
                 l_check++;
-                lname =
+                lname = optarg;
                 l_flag = 1;
 				break;
             }
-			case 'd':
+			case 'd':{
 				debug = 1;
 				break;
+            }
+            case 'i':{
+                iname = optarg;
+                i_check++;
+                break;
+            }
+            case 'o':{
+                oname = optarg;
+                o_check++;
+                break;
+            }
             default: 
                 err = 1;
                 exit(err);
                 break;
 		}
-    }
-    if ((optind+7) > argc) {	
-        // change here will cause valgrind errors. and then go to line 222. 
 
+    }
+    if ((optind+3) > argc) {	
+        // change here will cause valgrind errors. and then go to line 226. 
+        // 3 required output, so +3 maybe correct. 
         // ALWAYS GOES HERE, WHY???
         /* need at least seven argument,  */
         return MISSING_ARGUMENT; // MISSING_ARGUMENT if less than 7. 
@@ -215,7 +237,25 @@ int main(int argc, char **argv)
     if(l_check > 1){
         return DUPLICATE_ARGUMENT;
     }
-    char* line = argv;
+    // need to change at here 
+    // if(i_check == 0){
+    //     return INPUT_FILE_MISSING;
+    // }
+    // if(o_check == 0){
+    //     return OUTPUT_FILE_UNWRITABLE;
+    // }
+    if(sname[0] == '-'){
+        return S_ARGUMENT_MISSING;
+    }
+    if(rname[0] == '-'){
+        return R_ARGUMENT_MISSING;
+    }
+    if(lname[0] == '-'){
+        return L_ARGUMENT_INVALID;
+    }
+    
+    // DID NOT GO THRU HERE
+    char* line = argv; //
     char** divided_line = divide_line(line);
 
     // goes here 
@@ -230,7 +270,7 @@ int main(int argc, char **argv)
     if(output_strstr == 0){
         return OUTPUT_FILE_UNWRITABLE;
     }
-    free(divide_line);
+    // free(divide_line);
     // detect for 's
     if (s_flag == 0){
         fprintf(stderr, "%s: missing -s option\n", argv[0]);
@@ -240,18 +280,17 @@ int main(int argc, char **argv)
 	//detect for -r
     else if (r_flag == 0){ // check -r
         fprintf(stderr, "%s: missing -r option\n", argv[0]);
-		fprintf(stderr, usage, argv[0]);
+		fprintf(stderr, usage, argv[1]);
 		return R_ARGUMENT_MISSING;
     }
     //detect for -l
     else if (l_flag == 0) {	// check -l
 		fprintf(stderr, "%s: missing -l option\n", argv[0]);
-		fprintf(stderr, usage, argv[0]);
+		fprintf(stderr, usage, argv[2]);
 		return L_ARGUMENT_INVALID;
 	} 
 
     else if (err) {
-    	fprintf(stderr, usage, argv[0]);
     	exit(1);
     }
 	/* see what we have */
