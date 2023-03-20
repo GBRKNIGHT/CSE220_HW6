@@ -147,6 +147,9 @@ int detect_dash_l(char* substrings[])
 
 int main(int argc, char **argv)
 {
+    if(argc<7){
+        return MISSING_ARGUMENT;
+    }
     for(int i = 0; i < argc;i++)
     {
     char* line = argv[i];
@@ -205,6 +208,34 @@ int main(int argc, char **argv)
             {
                 l_check++;
                 lname = optarg;
+                // need to split the 10,13 by comma here
+                char* s[1] = {','};
+                char* token = strtok(lname, s);
+                int l_num_count = 0;
+                char** nums[2];
+                while(token != NULL){
+                    nums[l_num_count] = token;
+                    l_num_count ++;
+                    if(l_num_count > 2){
+                        return L_ARGUMENT_INVALID;
+                    }
+                }
+                char* str_zero = nums[0];
+                char* str_one = nums[1];
+                long long_zero = strtol(str_zero, strlen(str_zero), 10);
+                long long_one = strtol(str_one, strlen(str_one), 10);
+                if((unsigned int)long_zero > MAX_LINE){
+                    return L_ARGUMENT_INVALID;
+                }
+                if ((unsigned int) long_one > MAX_LINE){
+                    return L_ARGUMENT_INVALID;
+                }
+                if(long_zero > long_one){
+                    return L_ARGUMENT_INVALID;
+                }
+                if((unsigned int) (long_one - long_zero) > 20){
+                    return L_ARGUMENT_INVALID;
+                }
                 l_flag = 1;
 				break;
             }
