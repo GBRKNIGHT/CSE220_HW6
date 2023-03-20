@@ -154,6 +154,20 @@ unsigned int is_wolf_invalid(char* wolf){
 }
 
 
+int find_comma(char* string){
+    int result = -999; // if not found, return -999 as result. 
+    int comma_count = 0;
+    for(int i = 0; i < strlen(string); i++){
+        if(string[i] == ','){
+            result = i;
+            comma_count ++;
+        }
+    }
+    if(comma_count > 1){
+        result = -999;
+    }
+    return result;
+}
 
 // following code copied from the instruction site, and modified by me. 
 /*
@@ -227,21 +241,29 @@ int main(int argc, char **argv)
                 l_check++;
                 lname = optarg;
                 // need to split the 10,13 by comma here
-                char* s[1] = {','};
-                char* token = strtok(lname, s);
-                
-                char** nums[2];
-                while(token != NULL){
-                    nums[l_num_count] = token;
-                    l_num_count ++;
-                    if(l_num_count > 1){
-                        return L_ARGUMENT_INVALID;
-                    }
+
+                int comma_loc = find_comma(lname);
+                if(comma_loc == -999){
+                    return L_ARGUMENT_INVALID;
                 }
+                if(comma_loc = strlen(lname)){
+                    return L_ARGUMENT_INVALID;
+                }
+                char* str_zero[50];
+                for(int j = 0; j < comma_loc; j++){
+                    str_zero[j] = lname[j];
+                }
+                str_zero[comma_loc] = '\0'; 
+                char* str_one[50];
+                int pointer = 0;
+                for(int j = comma_loc + 1; j < strlen(lname); j++){
+                    str_one[pointer] = lname[j];
+                    pointer++;
+                }
+                str_one[pointer + 1] = '\0';
 
-
-                char* str_zero = nums[0];
-                char* str_one = nums[1];
+                
+                
                 long long_zero = strtol(str_zero, strlen(str_zero), 10);
                 long long_one = strtol(str_one, strlen(str_one), 10);
                 // this part should work 
