@@ -136,6 +136,25 @@ int detect_dash_l(char* substrings[])
 }
 
 
+unsigned int is_wolf_invalid(char* wolf){
+    unsigned int result = 1;
+    int length = strlen(wolf);
+    int char_zero = (wolf[0] == '*'); // if char0 is *
+    if(char_zero == 0){
+        for(int i = 1; i < length - 1; i++){
+            if(wolf[i] == '*'){
+                return -999; // not valid if * appears in the mid of string. 
+            }
+        }
+    }
+    else{ // if char0 is *, it is valid search no whether what. 
+        return 1;
+    }
+    return result; 
+}
+
+
+
 // following code copied from the instruction site, and modified by me. 
 /*
 	example of command line parsing via getopt
@@ -167,15 +186,15 @@ int main(int argc, char **argv)
 	char *sname = "default_sname";
     char *rname = "default_rname";
     char *lname = "default_lname";
-    char *iname = "default_iname";
-    char *oname = "default_oname";
-	static char usage[] = "usage: %s [-srl] [-s]sname [-r] rname [-l] lname [input_name] [output_name]\n";
+	static char usage[] = "usage: %s [-srl] [-s]sname [-r] rname [-l] lname [-w] lname [input_file] [output_file]\n";
     int s_check = 0;
     int r_check = 0;
     int l_check = 0;
     int i_check = 0;
     int o_check = 0;
     int w_check = 0;
+    int valid_wolf = 0;
+    int l_num_count = 0;
 	while ((c = getopt(argc, argv, "s:r:wl:io")) != -1){
         // s: -s, r:-r, l:-l, i: input file, o:output file
 
@@ -199,6 +218,8 @@ int main(int argc, char **argv)
 
             case 'w':{
                 w_check ++;
+                valid_wolf = is_wolf_invalid(sname);
+                w_flag = 1;
                 break;
             }
 			case 'l':
@@ -208,19 +229,22 @@ int main(int argc, char **argv)
                 // need to split the 10,13 by comma here
                 char* s[1] = {','};
                 char* token = strtok(lname, s);
-                int l_num_count = 0;
+                
                 char** nums[2];
                 while(token != NULL){
                     nums[l_num_count] = token;
                     l_num_count ++;
-                    if(l_num_count > 2){
+                    if(l_num_count > 1){
                         return L_ARGUMENT_INVALID;
                     }
                 }
+
+
                 char* str_zero = nums[0];
                 char* str_one = nums[1];
                 long long_zero = strtol(str_zero, strlen(str_zero), 10);
                 long long_one = strtol(str_one, strlen(str_one), 10);
+                // this part should work 
                 if((unsigned int)long_zero > MAX_LINE){
                     return L_ARGUMENT_INVALID;
                 }
@@ -230,7 +254,7 @@ int main(int argc, char **argv)
                 if(long_zero > long_one){
                     return L_ARGUMENT_INVALID;
                 }
-                if((unsigned int) (long_one - long_zero) > 20){
+                if((long_one - long_zero) > 20){
                     return L_ARGUMENT_INVALID;
                 }
                 l_flag = 1;
@@ -266,15 +290,11 @@ int main(int argc, char **argv)
 		}
 
     }
+    
     if(argc < 7){
         return MISSING_ARGUMENT;
     }
-    if ((optind+3) > argc) {	
-        // change here will cause valgrind errors. and then go to line 226. 
-        // ALWAYS GOES HERE, WHY???
-        /* need at least seven argument,  */
-        return MISSING_ARGUMENT; // MISSING_ARGUMENT if less than 7. 
-    }
+    
     if(s_check > 1){
         return DUPLICATE_ARGUMENT;
     }
@@ -284,16 +304,36 @@ int main(int argc, char **argv)
     if(l_check > 1){
         return DUPLICATE_ARGUMENT;
     }
-    // need to change at here 
-    // if(i_check == 0){
-    //     return INPUT_FILE_MISSING;
-    // }
-    // if(o_check == 0){
-    //     return OUTPUT_FILE_UNWRITABLE;
-    // }
+    if(w_check > 1){
+        return DUPLICATE_ARGUMENT;
+    }
     
-    // puts(iname);
-    // puts(oname);
+    
+
+    // goes here 
+    // input and output files are in the end of the command, so we can retrieve it. 
+    char* input_file = argv[optind];
+    char* output_file = argv[optind + 1]; 
+
+    if(input_file[0] == '-' || input_file[0] == '/'){
+        return INPUT_FILE_MISSING;
+    }
+    if(output_file[0] == '-' || output_file[0] == '/'){
+        return OUTPUT_FILE_UNWRITABLE;
+    }
+                
+
+    //detect writeability
+    char* input_strstr = strstr(input_file, ".txt");
+    if(input_strstr == 0){
+        return INPUT_FILE_MISSING;
+    }
+    char* output_strstr = strstr(output_file, ".txt");
+    if(output_strstr == 0){
+        return OUTPUT_FILE_UNWRITABLE;
+    }
+    
+
     if(sname[0] == '-'){
         return S_ARGUMENT_MISSING;
     }
@@ -305,39 +345,6 @@ int main(int argc, char **argv)
     }
     
 
-    // -w missing, do it later. 
-
-    *iname = argv[argc - 2];
-    // second last argument
-    i_check++;
-    *oname = argv [argc - 1];
-    // last argument
-    // argv[argc] will be NULL. 
-    o_check++;
-    if(iname[0] == '-'){
-        return INPUT_FILE_MISSING;
-    }
-    if(oname[0] == '-'){
-        return OUTPUT_FILE_UNWRITABLE;
-    }
-                
-    char* line = argv; //
-    char** divided_line = divide_line(line);
-
-    // goes here 
-    // input and output files are in the end of the command, so we can retrieve it. 
-    char* input_file = divided_line[sizeof(divide_line) - 1];
-    input_file = iname;
-    char* output_file = divided_line[sizeof(divide_line)]; 
-    output_file = oname;
-    char* input_strstr = strstr(input_file, ".txt");
-    if(input_strstr == 0){
-        return INPUT_FILE_MISSING;
-    }
-    char* output_strstr = strstr(output_file, ".txt");
-    if(output_strstr == 0){
-        return OUTPUT_FILE_UNWRITABLE;
-    }
     // free(divide_line);
     // detect for 's
     if (s_flag == 0){
@@ -368,9 +375,12 @@ int main(int argc, char **argv)
     // printf("rflag = %d\n", r_flag);
 	// printf("lname = \"%s\"\n", lname);
 
+    
+    if(valid_wolf == -999){
+        return WILDCARD_INVALID;
+    }
 	
 	if (optind < argc)	{
-
         for (; optind < argc; optind++){
             printf("argument: \"%s\"\n", argv[optind]);
         }
@@ -384,19 +394,19 @@ int main(int argc, char **argv)
 
     char *search_text = sname;
     char *replacement_text = rname;
-    if(strlen(replacement_text - 1) > MAX_SEARCH_LEN){
-        return L_ARGUMENT_INVALID;
-    }
+    // if(strlen(replacement_text - 1) > MAX_SEARCH_LEN){
+    //     return L_ARGUMENT_INVALID;
+    // }
     
-    FILE* input = fopen(iname, search_text);
+    FILE* input = fopen(input_file, "r+");
     if(input == NULL){
         return INPUT_FILE_MISSING;
     }
     
-    FILE* output = fopen(oname, replacement_text);
-    if(output == NULL){
-        return OUTPUT_FILE_UNWRITABLE;
-    }
+    FILE* output = fopen(output_file, "r+");
+    // if(output == NULL){
+    //     return OUTPUT_FILE_UNWRITABLE;
+    // }
 
     // detect how many lines do the inout and output have, by detecting NULL and EOF
     int in_file_len = 0;
