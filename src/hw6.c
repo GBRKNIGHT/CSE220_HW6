@@ -147,9 +147,6 @@ int detect_dash_l(char* substrings[])
 
 int main(int argc, char **argv)
 {
-    if(argc<7){
-        return MISSING_ARGUMENT;
-    }
     for(int i = 0; i < argc;i++)
     {
     char* line = argv[i];
@@ -269,6 +266,9 @@ int main(int argc, char **argv)
 		}
 
     }
+    if(argc<7){
+        return MISSING_ARGUMENT;
+    }
     if ((optind+3) > argc) {	
         // change here will cause valgrind errors. and then go to line 226. 
         // ALWAYS GOES HERE, WHY???
@@ -297,8 +297,8 @@ int main(int argc, char **argv)
     if(oname[0] == ' '){
         return OUTPUT_FILE_UNWRITABLE;
     }
-    puts(iname);
-    puts(oname);
+    // puts(iname);
+    // puts(oname);
     if(sname[0] == '-'){
         return S_ARGUMENT_MISSING;
     }
@@ -309,14 +309,19 @@ int main(int argc, char **argv)
         return L_ARGUMENT_INVALID;
     }
     
-    // DID NOT GO THRU HERE
+
+    // -w missing, do it later. 
+
+
     char* line = argv; //
     char** divided_line = divide_line(line);
 
     // goes here 
     // input and output files are in the end of the command, so we can retrieve it. 
     char* input_file = divided_line[sizeof(divide_line) - 1];
-    char* output_file = divided_line[sizeof(divide_line)];
+    input_file = iname;
+    char* output_file = divided_line[sizeof(divide_line)]; 
+    output_file = oname;
     char* input_strstr = strstr(input_file, ".txt");
     if(input_strstr == 0){
         return INPUT_FILE_MISSING;
@@ -366,5 +371,43 @@ int main(int argc, char **argv)
 		printf("no arguments left to process\n");
 	}
     
-	// exit(0);
+
+    // part2 codes.
+
+    char *search_text = sname;
+    char *replacement_text = rname;
+    if(strlen(replacement_text - 1) > MAX_SEARCH_LEN){
+        return L_ARGUMENT_INVALID;
+    }
+    
+    FILE* input = fopen(iname, search_text);
+    if(input == NULL){
+        return INPUT_FILE_MISSING;
+    }
+    
+    FILE* output = fopen(oname, replacement_text);
+    if(output == NULL){
+        return OUTPUT_FILE_UNWRITABLE;
+    }
+
+    // detect how many lines do the inout and output have, by detecting NULL and EOF
+    int in_file_len = 0;
+    for(char c = getc(input); (c!= NULL)&&(c!=EOF); c++){
+        if(c == '\n') in_file_len++;
+    }
+
+    int out_file_len = 0;
+    for(char c = getc(output); (c!= NULL)&&(c!=EOF); c++){
+        if (c == '\n')
+        {
+            out_file_len++;
+        }
+        
+    }
+    if((in_file_len > MAX_LINE)&&(out_file_len > MAX_LINE)){
+        return OUTPUT_FILE_UNWRITABLE;
+    }
+
+    
+	exit(0);
 }
