@@ -180,13 +180,22 @@ int find_comma(char* string){
 
 int main(int argc, char **argv)
 {
+    // plan to return error value after deal with things. 
+        int missing_argument = 0;
+        int duplicate_argument = 0;
+        int input_file_missing = 0;
+        int output_file_unwritable = 0;
+        int s_argument_missing = 0; 
+        int r_argument_missing = 0;
+        int l_arguments_invalid = 0;
+        int wildcard_invalid = 0;
+    
     for(int i = 0; i < argc;i++)
     {
     char* line = argv[i];
     if (line == NULL) 
     {
-        
-        return MISSING_ARGUMENT;
+        missing_argument = 1;
     }
     
     // int length = strlen(line);
@@ -244,40 +253,50 @@ int main(int argc, char **argv)
 
                 int comma_loc = find_comma(lname);
                 if(comma_loc == -999){
-                    return L_ARGUMENT_INVALID;
+                    l_arguments_invalid = 1;
                 }
                 if(comma_loc = strlen(lname)){
-                    return L_ARGUMENT_INVALID;
+                    l_arguments_invalid = 1;
                 }
-                char* str_zero[50];
-                for(int j = 0; j < comma_loc; j++){
-                    str_zero[j] = lname[j];
+
+
+                int* num[2] = {0, 0};
+                char *pt;
+                pt = strtok (lname,",");
+                while (pt != NULL) {
+                    int which_num = 0;
+                    num[which_num] = atoi(pt);
+                    pt = strtok (NULL, ",");
+                    which_num ++;
                 }
-                str_zero[comma_loc] = '\0'; 
-                char* str_one[50];
-                int pointer = 0;
-                for(int j = comma_loc + 1; j < strlen(lname); j++){
-                    str_one[pointer] = lname[j];
-                    pointer++;
-                }
-                str_one[pointer + 1] = '\0';
+
+
+
 
                 
-                
-                long long_zero = strtol(str_zero, strlen(str_zero), 10);
-                long long_one = strtol(str_one, strlen(str_one), 10);
-                // this part should work 
-                if((unsigned int)long_zero > MAX_LINE){
-                    return L_ARGUMENT_INVALID;
-                }
-                if ((unsigned int) long_one > MAX_LINE){
-                    return L_ARGUMENT_INVALID;
+                // long long_zero = strtol(str_zero, strlen(str_zero), 10);
+                // long long_one = strtol(str_one, strlen(str_one), 10);
+                long long_zero = (long) num[0];
+                long long_one = (long) num[1];
+                if((long_zero < 0) || (long_one < 0)){
+                    l_arguments_invalid = 1;
                 }
                 if(long_zero > long_one){
-                    return L_ARGUMENT_INVALID;
+                    l_arguments_invalid = 1;
+                }
+                // this part should work 
+                if((unsigned int)long_zero > MAX_LINE)
+                {
+                    l_arguments_invalid = 1;
+                }
+                if ((unsigned int) long_one > MAX_LINE){
+                    l_arguments_invalid = 1;
+                }
+                if(long_zero > long_one){
+                    l_arguments_invalid = 1;
                 }
                 if((long_one - long_zero) > 20){
-                    return L_ARGUMENT_INVALID;
+                    l_arguments_invalid = 1;
                 }
                 l_flag = 1;
 				break;
@@ -314,20 +333,20 @@ int main(int argc, char **argv)
     }
     
     if(argc < 7){
-        return MISSING_ARGUMENT;
+        missing_argument = 1;
     }
     
     if(s_check > 1){
-        return DUPLICATE_ARGUMENT;
+        duplicate_argument = 1;
     }
     if(r_check > 1){
-        return DUPLICATE_ARGUMENT;
+        duplicate_argument = 1;
     }
     if(l_check > 1){
-        return DUPLICATE_ARGUMENT;
+        duplicate_argument = 1;
     }
     if(w_check > 1){
-        return DUPLICATE_ARGUMENT;
+        duplicate_argument = 1;
     }
     
     
@@ -338,32 +357,32 @@ int main(int argc, char **argv)
     char* output_file = argv[optind + 1]; 
 
     if(input_file[0] == '-' || input_file[0] == '/'){
-        return INPUT_FILE_MISSING;
+        input_file_missing = 1;
     }
     if(output_file[0] == '-' || output_file[0] == '/'){
-        return OUTPUT_FILE_UNWRITABLE;
+        output_file_unwritable = 1;
     }
                 
 
     //detect writeability
     char* input_strstr = strstr(input_file, ".txt");
     if(input_strstr == 0){
-        return INPUT_FILE_MISSING;
+        input_file_missing = 1;
     }
     char* output_strstr = strstr(output_file, ".txt");
     if(output_strstr == 0){
-        return OUTPUT_FILE_UNWRITABLE;
+        output_file_unwritable = 1;
     }
     
 
     if(sname[0] == '-'){
-        return S_ARGUMENT_MISSING;
+        s_argument_missing = 1;
     }
     if(rname[0] == '-'){
-        return R_ARGUMENT_MISSING;
+        r_argument_missing = 1;
     }
     if(lname[0] == '-'){
-        return L_ARGUMENT_INVALID;
+        l_arguments_invalid = 1;
     }
     
 
@@ -372,34 +391,27 @@ int main(int argc, char **argv)
     if (s_flag == 0){
         fprintf(stderr, "%s: missing -s option\n", argv[0]);
 		fprintf(stderr, usage, argv[0]);
-		return S_ARGUMENT_MISSING;
+		s_argument_missing = 1;
     }
 	//detect for -r
     else if (r_flag == 0){ // check -r
         fprintf(stderr, "%s: missing -r option\n", argv[0]);
 		fprintf(stderr, usage, argv[1]);
-		return R_ARGUMENT_MISSING;
+		r_argument_missing = 1;
     }
     //detect for -l
     else if (l_flag == 0) {	// check -l
 		fprintf(stderr, "%s: missing -l option\n", argv[0]);
 		fprintf(stderr, usage, argv[2]);
-		return L_ARGUMENT_INVALID;
+		l_arguments_invalid = 1;
 	} 
 
     else if (err) {
     	exit(1);
     }
-	/* see what we have */
-	// printf("debug = %d\n", debug);
-	// printf("sflag = %d\n", s_flag);
-	// printf("lflag = %d\n", l_flag);
-    // printf("rflag = %d\n", r_flag);
-	// printf("lname = \"%s\"\n", lname);
-
     
     if(valid_wolf == -999){
-        return WILDCARD_INVALID;
+        wildcard_invalid = 1;
     }
 	
 	if (optind < argc)	{
@@ -410,8 +422,30 @@ int main(int argc, char **argv)
 	else {
 		printf("no arguments left to process\n");
 	}
-    
-
+    if(missing_argument){
+        return MISSING_ARGUMENT;
+    }
+    if(duplicate_argument){
+        return DUPLICATE_ARGUMENT;
+    }
+    if(input_file_missing){
+        return INPUT_FILE_MISSING;
+    }
+    if(output_file_unwritable){
+        return OUTPUT_FILE_UNWRITABLE;
+    }
+    if(s_argument_missing){
+        return S_ARGUMENT_MISSING;
+    }
+    if(r_argument_missing){
+        return R_ARGUMENT_MISSING;
+    }
+    if(l_arguments_invalid){
+        return L_ARGUMENT_INVALID;
+    }
+    if(wildcard_invalid){
+        return WILDCARD_INVALID;
+    }
     // part2 codes.
 
     char *search_text = sname;
