@@ -184,37 +184,37 @@ int find_comma(char* string){
 // https://codeforwin.org/c-programming/c-program-find-and-replace-a-word-in-file
 
 
-void replace(char* input_file, char* old_word, char* new_word){
-    char* pos, temp[MAX_SEARCH_LEN];
-    int old_length = strlen(old_word);
-    // int new_length = strlen(new_word);
-    int index = 0;
+// void replace(char* input_file, char* old_word, char* new_word){
+//     char* pos, temp[MAX_SEARCH_LEN];
+//     int old_length = strlen(old_word);
+//     // int new_length = strlen(new_word);
+//     int index = 0;
 
 
  
 
-    while ((pos = strstr(input_file, old_word)) != NULL)
-    {
-        // Backup current line
-        strcpy(temp, input_file);
+//     while ((pos = strstr(input_file, old_word)) != NULL)
+//     {
+//         // Backup current line
+//         strcpy(temp, input_file);
 
-        // Index of current found word
-        index = pos - input_file;
+//         // Index of current found word
+//         index = pos - input_file;
 
-        // // Terminate str after word found index
-        input_file[index] = '\0';
+//         // // Terminate str after word found index
+//         input_file[index] = '\0';
 
-        // Concatenate str with new word 
-        strcat(input_file, new_word);
+//         // Concatenate str with new word 
+//         strcat(input_file, new_word);
         
-        // Concatenate str with remaining words after 
-        // oldword found index.
-        strcat(input_file, temp + index + old_length);
+//         // Concatenate str with remaining words after 
+//         // oldword found index.
+//         strcat(input_file, temp + index + old_length);
 
-       // printf("214");
-    }
-    //return 0; 
-}
+//        // printf("214");
+//     }
+//     //return 0; 
+// }
 
 
 
@@ -567,7 +567,39 @@ int main(int argc, char **argv)
             break;
         }
        // printf(bytes_read);
-        replace(string, sname, rname);
+        //replace(string, sname, rname);
+
+
+
+
+           char* pos, temp[MAX_SEARCH_LEN];
+    int old_length = strlen(sname);
+    // int new_length = strlen(new_word);
+    int index = 0;
+
+
+ 
+
+    while ((pos = strstr(string, sname)) != NULL)
+    {
+        // Backup current line
+        strcpy(temp, string);
+
+        // Index of current found word
+        index = pos - string;
+
+        // // Terminate str after word found index
+        string[index] = '\0';
+
+        // Concatenate str with new word 
+        strcat(string, rname);
+        
+        // Concatenate str with remaining words after 
+        // oldword found index.
+        strcat(string, temp + index + old_length);
+
+       // printf("214");
+    }
        // printf(bytes_read);
         fputs(string, output);
         //free(bytes_read);
