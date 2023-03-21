@@ -363,16 +363,6 @@ int main(int argc, char **argv)
         output_file_unwritable = 1;
     }
                 
-
-    //detect writeability
-    char* input_strstr = strstr(input_file, ".txt");
-    if(input_strstr == 0){
-        input_file_missing = 1;
-    }
-    char* output_strstr = strstr(output_file, ".txt");
-    if(output_strstr == 0){
-        output_file_unwritable = 1;
-    }
     
 
     if(sname[0] == '-'){
