@@ -146,8 +146,16 @@ unsigned int is_wolf_invalid(char* wolf){
                 return -999; // not valid if * appears in the mid of string. 
             }
         }
+        if(wolf[length] != '*'){
+            // if no * in the string
+            return -999;
+        }
     }
     else{ // if char0 is *, it is valid search no whether what. 
+        if(wolf[strlen(wolf)] == '*'){
+            // if the last char is also '*', then it is an error. 
+            return -999;
+        }
         return 1;
     }
     return result; 
@@ -318,15 +326,7 @@ int main(int argc, char **argv)
             //     o_check++;
             //     break;
             // }
-            case ':':{
-                //error part
-                err = 1;
-                exit(err);
-                break;
-            }
             default: 
-                err = 1;
-                exit(err);
                 break;
 		}
 
