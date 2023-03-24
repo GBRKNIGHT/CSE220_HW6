@@ -291,3 +291,50 @@
 //     }
 //     return 0;
 // }
+
+
+
+    // int out_file_len = 0;
+    // for(char c = getc(output); (c!= NULL)&&(c!=EOF); c++){
+    //     if (c == '\n')
+    //     {
+    //         out_file_len++;
+    //     }
+        
+    // }
+
+    // printf("%s %s\n", sname, rname);
+
+
+// The following function is inspired by this website: 
+// https://codeforwin.org/c-programming/c-program-find-and-replace-a-word-in-file
+
+
+// void replace(char* input_file, char* old_word, char* new_word){
+//     char* pos, temp[MAX_SEARCH_LEN];
+//     int old_length = strlen(old_word);
+//     // int new_length = strlen(new_word);
+//     int index = 0;
+//     while ((pos = strstr(input_file, old_word)) != NULL)
+//     {
+//         // Backup current line
+//         strcpy(temp, input_file);
+
+//         // Index of current found word
+//         index = pos - input_file;
+
+//         // // Terminate str after word found index
+//         input_file[index] = '\0';
+
+//         // Concatenate str with new word 
+//         strcat(input_file, new_word);
+        
+//         // Concatenate str with remaining words after 
+//         // oldword found index.
+//         strcat(input_file, temp + index + old_length);
+
+//        // printf("214");
+//     }
+//     //return 0; 
+// }
+
