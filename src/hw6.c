@@ -476,7 +476,7 @@ int main(int argc, char **argv)
     FILE* input_temp = input;
     // write the part before the replacement start. 
     int j = 0;
-    while (j < num[0]){
+    while (j < num[0] - 1){
         int bytes_read;
         size_t size = 200;
         char *string;
@@ -491,7 +491,7 @@ int main(int argc, char **argv)
     }
 
     // replacement part. 
-    while(j < (num[1])){
+    while(j <= (num[1])){
         printf(" STUPID %d\n", (int)(num[1] - num[0]+1));
         // replace(input_temp, sname, rname);
         // fputs(input_temp, output);
