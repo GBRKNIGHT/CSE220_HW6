@@ -150,7 +150,7 @@ unsigned int is_wolf_invalid(char* wolf){
 int find_comma(char* string){
     int result = -999; // if not found, return -999 as result. 
     int comma_count = 0;
-    for(int i = 0; i < strlen(string); i++){
+    for(long unsigned int i = 0; i < strlen(string); i++){
         if(string[i] == ','){
             result = i;
             comma_count ++;
@@ -173,7 +173,7 @@ int compare_str(char* str1, char* str2){
         return 0;
     }
     else{
-        for(int i = 0; i < strlen(str1); i++){
+        for(long unsigned int i = 0; i < strlen(str1); i++){
             if(str1[i] != str2[i]){
                 return 0;
             }
@@ -262,8 +262,8 @@ int main(int argc, char **argv)
     int s_check = 0;
     int r_check = 0;
     int l_check = 0;
-    int i_check = 0;
-    int o_check = 0;
+    // int i_check = 0;
+    // int o_check = 0;
     int w_check = 0;
     int valid_wolf = 0;
     int l_num_count = 0;
@@ -300,7 +300,7 @@ int main(int argc, char **argv)
                     strcat(optarg, argv[loc_da_r + k + 1]);
                 }
                 // 3. delete the double quote
-                char* temp_optarg[strlen(optarg) - 3];
+                char* temp_optarg[strlen(optarg) - 2];
                 // for(int l = 0; l < strlen(temp_optarg); l++){
                 //     temp_optarg[l] = optarg[l+1];
                 // }
@@ -326,7 +326,7 @@ int main(int argc, char **argv)
                     l_arguments_invalid = 1;
                 }
             //     printf("%d\n", l_arguments_invalid);
-                if(comma_loc == strlen(lname)){
+                if((long unsigned int)comma_loc == strlen(lname)){
                     l_arguments_invalid = 1;
                 }
             //     printf("%d\n", l_arguments_invalid);
@@ -367,9 +367,9 @@ int main(int argc, char **argv)
                     l_arguments_invalid = 1;
                 }
                //  printf("%d\n", l_arguments_invalid);
-                if ((unsigned int) long_one > MAX_LINE){
-                    l_arguments_invalid = 1;
-                }
+                // if ((unsigned int) long_one > MAX_LINE){
+                //     l_arguments_invalid = 1;
+                // }
                 if(long_zero > long_one){
                     l_arguments_invalid = 1;
                 }
@@ -462,11 +462,11 @@ int main(int argc, char **argv)
 		r_argument_missing = 1;
     }
     //detect for -l
-    else if (l_flag == 0) {	// check -l
-		fprintf(stderr, "%s: missing -l option\n", argv[0]);
-		fprintf(stderr, usage, argv[2]);
-		l_arguments_invalid = 1;
-	} 
+    // else if (l_flag == 0) {	// check -l
+	// 	fprintf(stderr, "%s: missing -l option\n", argv[0]);
+	// 	fprintf(stderr, usage, argv[2]);
+	// 	l_arguments_invalid = 1;
+	// } 
 
     else if (err) {
     	exit(1);
@@ -513,105 +513,161 @@ int main(int argc, char **argv)
 
     // part2 codes.
     
-    char *search_text = sname;
-    char *replacement_text = rname;
+    // char *search_text = sname;
+    // char *replacement_text = rname;
     FILE* input = fopen(input_file, "r");// read only
     if(input == NULL){ 
         return INPUT_FILE_MISSING;
     }
 
-    FILE* output = fopen(output_file, "w+"); // write only 
+    FILE* output = fopen(output_file, "w"); // write only 
     if (output == NULL){
         return OUTPUT_FILE_UNWRITABLE;
     }
     
     FILE* input_temp = input;
     // write the part before the replacement start. 
-    int j = 0;
-    while (j < num[0] - 1){
-        int bytes_read;
-        size_t size = 200;
-        char *string;
-        string = (char *) malloc (size);
-        bytes_read = getline (&string, &size, input_temp);   
-        if (bytes_read == EOF){
-            break;
-        }     
-        j++;
-        fputs(string, output);
-        free(string);
-    }
-
-    // replacement part. 
-    while(j <= (num[1])){
-        printf(" STUPID %d\n", (int)(num[1] - num[0]+1));
-        // replace(input_temp, sname, rname);
-        // fputs(input_temp, output);
-        int bytes_read;
-        size_t size = 200;
-        char *string;
-
-        string = (char *) malloc (size);
-        bytes_read = getline (&string, &size, input_temp);
-        // bytes_read = getline (&string, &size, input_temp);
-        printf("563 %d\n", bytes_read);
-        if (bytes_read == EOF){
-            break;
-        }
-        j++;
-        // printf(bytes_read);
-        //replace(string, sname, rname);
-
-        // The following function is inspired by this website: 
-        // https://codeforwin.org/c-programming/c-program-find-and-replace-a-word-in-file
-
-        char* pos, temp[1000];
-        int old_length = strlen(sname);
-        // int new_length = strlen(new_word);
-        int index = 0;
-
-        while ((pos = strstr(string, sname)) != NULL)
+    if(l_check == 0){
+        while (1)
         {
-            // Backup current line
-            strcpy(temp, string);
+            int j = 0;
+            // replace(input_temp, sname, rname);
+            // fputs(input_temp, output);
+            int bytes_read;
+            size_t size = 200;
+            char *string;
 
-            // Index of current found word
-            index = pos - string;
+            string = (char *) malloc (size);
+            bytes_read = getline (&string, &size, input_temp);
+            // bytes_read = getline (&string, &size, input_temp);
+            printf("563 %d\n", bytes_read);
+            if (bytes_read == EOF){
+                break;
+            }
+            j++;
+            // printf(bytes_read);
+            //replace(string, sname, rname);
+            // Following code inspired by: 
+            // https://codeforwin.org/c-programming/c-program-find-and-replace-a-word-in-file
 
-            // // Terminate str after word found index
-            string[index] = '\0';
+            char* pos, temp[1000];
+            int old_length = strlen(sname);
+            // int new_length = strlen(new_word);
+            int index = 0;
 
-            // Concatenate str with new word 
-            strcat(string, rname);
-            
-            // Concatenate str with remaining words after 
-            // oldword found index.
-            strcat(string, temp + index + old_length);
+            while ((pos = strstr(string, sname)) != NULL)
+            {
+                // Backup current line
+                strcpy(temp, string);
 
-        // printf("214");
+                // Index of current found word
+                index = pos - string;
+
+                // // Terminate str after word found index
+                string[index] = '\0';
+
+                // Concatenate str with new word 
+                strcat(string, rname);
+                
+                // Concatenate str with remaining words after 
+                // oldword found index.
+                strcat(string, temp + index + old_length);
+
+            // printf("214");
+            }
+            fputs(string, output);
+            free(string);
         }
-        fputs(string, output);
-        free(string);
+        
+    }
+    else{
+        int j = 0;
+        while (j < num[0] - 1){
+            int bytes_read;
+            size_t size = 200;
+            char *string;
+            string = (char *) malloc (size);
+            bytes_read = getline (&string, &size, input_temp);   
+            if (bytes_read == EOF){
+                break;
+            }     
+            j++;
+            fputs(string, output);
+            free(string);
+        }
+
+        // replacement part. 
+        while(j <= (num[1])){
+            printf(" STUPID %d\n", (int)(num[1] - num[0]+1));
+            // replace(input_temp, sname, rname);
+            // fputs(input_temp, output);
+            int bytes_read;
+            size_t size = 200;
+            char *string;
+
+            string = (char *) malloc (size);
+            bytes_read = getline (&string, &size, input_temp);
+            // bytes_read = getline (&string, &size, input_temp);
+            printf("563 %d\n", bytes_read);
+            if (bytes_read == EOF){
+                break;
+            }
+            j++;
+            // printf(bytes_read);
+            //replace(string, sname, rname);
+
+            // The following function is inspired by this website: 
+            // https://codeforwin.org/c-programming/c-program-find-and-replace-a-word-in-file
+
+            char* pos, temp[1000];
+            int old_length = strlen(sname);
+            // int new_length = strlen(new_word);
+            int index = 0;
+
+            while ((pos = strstr(string, sname)) != NULL)
+            {
+                // Backup current line
+                strcpy(temp, string);
+
+                // Index of current found word
+                index = pos - string;
+
+                // // Terminate str after word found index
+                string[index] = '\0';
+
+                // Concatenate str with new word 
+                strcat(string, rname);
+                
+                // Concatenate str with remaining words after 
+                // oldword found index.
+                strcat(string, temp + index + old_length);
+
+            // printf("214");
+            }
+            fputs(string, output);
+            free(string);
+        }
+        while (1){
+            int bytes_read;
+            size_t size = 200;
+            char *string;
+            string = (char *) malloc (size);
+            bytes_read = getline (&string, &size, input_temp);   
+            if (bytes_read == EOF){
+                break;
+            }    
+
+            if(bytes_read == 0){
+                break;
+            } 
+            j++;
+            fputs(string, output);
+            free(string);
+        }
     }
 
     //after replacement. 
-    while (1){
-        int bytes_read;
-        size_t size = 200;
-        char *string;
-        string = (char *) malloc (size);
-        bytes_read = getline (&string, &size, input_temp);   
-        if (bytes_read == EOF){
-            break;
-        }    
-
-        if(bytes_read == 0){
-            break;
-        } 
-        j++;
-        fputs(string, output);
-        free(string);
-    }
+    
 
     // fputs("---END---", output);
     fclose(input);
