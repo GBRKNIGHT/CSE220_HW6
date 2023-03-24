@@ -183,6 +183,38 @@ int compare_str(char* str1, char* str2){
 }
 
 
+// function to detect if a paraphrase contains a double quote
+int detect_double_quote(char* original){
+    if(original[strlen(original) == '\"']){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+
+
+// Function to find -r in an array of strings, return error (-999) if not found. 
+// If found, return the position of it. 
+int detect_dash_r(char* substrings[])
+{
+    int result = -999;
+    int size = sizeof(substrings);
+    for(int i = 0; i < size; i++)
+    {
+        if(strlen(substrings[i]) != 2)
+        {
+            continue;
+        }
+        char* substring = substrings[i];
+        char* dash_s = "-r";
+        char* p_strstr = strstr(substring, dash_s);
+        if(p_strstr){
+            result = i;
+        }
+    }
+    return result;
+}
 
 // following code copied from the instruction site, and modified by me. 
 /*
@@ -253,6 +285,26 @@ int main(int argc, char **argv)
                 //rname
                 r_check ++;
                 r_flag = 1;
+                if(optarg[0] == '\"'){
+                    // how to merge double quoted string, 
+                    // 1. find where is -r located in the argv[]
+                    int loc_da_r = detect_dash_r(argv);
+                    // 2. find and replace until find next double quote. 
+                    int k = 2;
+                    // 2.1 add everything before a double quote
+                    while(detect_double_quote(argv[loc_da_r + k]) == 0){
+                        strcat(optarg, argv[loc_da_r + k]);
+                        k++;
+                    }
+                    // 2.2 add double quote
+                    strcat(optarg, argv[loc_da_r + k + 1]);
+                }
+                // 3. delete the double quote
+                char* temp_optarg[strlen(optarg) - 3];
+                // for(int l = 0; l < strlen(temp_optarg); l++){
+                //     temp_optarg[l] = optarg[l+1];
+                // }
+                // 4. add to rname
                 rname = optarg;
 				break;
             }	
