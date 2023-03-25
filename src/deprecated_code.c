@@ -338,3 +338,25 @@
 //     //return 0; 
 // }
 
+
+
+                // if(optarg[0] == '\"'){
+                //     // how to merge double quoted string, 
+                //     // 1. find where is -r located in the argv[]
+                //     int loc_da_r = detect_dash_r(argv);
+                //     // 2. find and replace until find next double quote. 
+                //     int k = 2;
+                //     // 2.1 add everything before a double quote
+                //     while(detect_double_quote(argv[loc_da_r + k]) == 0){
+                //         strcat(optarg, argv[loc_da_r + k]);
+                //         k++;
+                //     }
+                //     // 2.2 add double quote
+                //     strcat(optarg, argv[loc_da_r + k + 1]);
+                // }
+                // // 3. delete the double quote
+                // char* temp_optarg[strlen(optarg) - 2];
+                // // for(int l = 0; l < strlen(temp_optarg); l++){
+                // //     temp_optarg[l] = optarg[l+1];
+                // // }
+                // // 4. add to rname
