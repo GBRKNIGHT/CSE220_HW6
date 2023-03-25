@@ -122,8 +122,11 @@ int detect_dash_r(char* substrings[])
 */
 
 
+
+// 这个function是想对比两个string，s_str 是sname
+// 
 int is_match(char* str1, char* s_str, int start_at){
-    for(int i = 0; i < strlen(s_str); i++){
+    for(int i = 0; i < strlen(s_str) - 1; i++){
         if(str1[start_at + i] != s_str[i]) return 0;
     }
     return 1;
@@ -131,6 +134,7 @@ int is_match(char* str1, char* s_str, int start_at){
 
 
 // substring function 
+// 找substrng的
 char* substring(char* str, int start, int end){
     char* result;
     result = malloc(end - start + 1);
@@ -494,125 +498,124 @@ int main(int argc, char **argv)
             // int new_length = strlen(new_word);
             if(sname[0] == '*'){
                 // if '*' at begin 
-                while ((pos = strstr(string, sname)) != NULL)
-                {
-                    // Backup current line
-                    strcpy(temp, string);
-
-                    // Index of current found word
-                    index = pos - string;
-
-                    // // Terminate str after word found index
-                    string[index] = '\0';
-
-                    // Concatenate str with new word 
-                    strcat(string, rname);
-                    
-                    // Concatenate str with remaining words after 
-                    // oldword found index.
-                    strcat(string, temp + index + old_length);
-
-                    // printf("214");
-                }
-            }
-
-            else if (sname [strlen(sname) - 1] == '*'){
-                // if '*' at end, goes to else statement, why?? 
-                sname[strlen(sname + 1)] = '\0';
-                printf("%s \n", sname);
-            }
-            else{
-                int num_space = 0;
-                // find how many words there are. 
-                for(int m = 0; m < strlen(string); m++){
-                    if(isspace(string[m])){
-                        num_space++;
-                    }
-                }
-
-
-                // save the positions of where each word begins. 
-                int* wordstart[num_space + 1] ;
-                int cur_start = 0;
-                wordstart[cur_start] = 0;
-
-                for(int m = 0; m < strlen(string); m++){
-                    if(isspace(string[m])){
-                        cur_start++;
-                        wordstart[cur_start] = (m+1); // the start of word after space
-                    }
-                }
-
-                // copy sname
-                char* temp_sname[strlen(sname + 1)];
-                temp_sname[0] = ' ';
-                strcat(temp_sname, sname);
-
-                // is match? (asterisk at end) 
-                char* temp_temp_sname;
-                for(int n = 0; n < num_space; n++){
-                    printf("%s \n", string);
-                    printf("%s \n", temp_sname);
-                    printf("%d \n", wordstart[n]);
-                    int matched = is_match(string, temp_sname, wordstart[n ]);
-                    
-                    if(matched){
-                        if(n+1 < num_space){
-                            
-                            temp_temp_sname = substring(string, wordstart[n], wordstart[n+1]-2);
-                            old_length = strlen(temp_temp_sname);
-                            int m = 0;      
-                            pos = strstr(string, temp_temp_sname);                     
-                            while ((pos = strstr(string, temp_temp_sname)) != NULL)
-                            {
-                                printf("%s \n", pos);
-                                // Backup current line
-                                strcpy(temp, string);
-
-                                // Index of current found word
-                                index = pos - string;
-
-                                // Terminate str after word found index
-                                string[index] = '\0';
-
-                                // Concatenate str with new word 
-                                strcat(string, rname);
-
-                                // Concatenate str with remaining words after oldword found index.
-                                strcat(string, temp + index + old_length);
-
-                                // printf("214");
-                            }
-                            free(temp_temp_sname);
-                        }
-
-                    }
-                }
-
-
-                // int m = 0;
-                // while ((pos = strstr(string, temp_sname)) != NULL)
+                // while ((pos = strstr(string, sname)) != NULL)
                 // {
-                //     printf("%s \n", pos);
                 //     // Backup current line
                 //     strcpy(temp, string);
 
                 //     // Index of current found word
                 //     index = pos - string;
 
-
-                //     // Terminate str after word found index
+                //     // // Terminate str after word found index
                 //     string[index] = '\0';
 
                 //     // Concatenate str with new word 
                 //     strcat(string, rname);
                     
-                //     // Concatenate str with remaining words after oldword found index.
+                //     // Concatenate str with remaining words after 
+                //     // oldword found index.
                 //     strcat(string, temp + index + old_length);
 
                 //     // printf("214");
                 // }
             }
+
+            // else {
+            //     // if '*' at end, goes to else statement, why?? 
+            //     sname[strlen(sname + 1)] = '\0';
+            //     printf("%s \n", sname);
+            // }
+
+            int num_space = 0;
+            // find how many words there are. 
+            for(int m = 0; m < strlen(string); m++){
+                if(isspace(string[m])){
+                    num_space++;
+                }
+            }
+
+
+            // save the positions of where each word begins. 
+            int* wordstart[num_space + 1] ;
+            int cur_start = 0;
+            wordstart[cur_start] = 0;
+
+            for(int m = 0; m < strlen(string); m++){
+                if(isspace(string[m])){
+                    cur_start++;
+                    wordstart[cur_start] = (m+1); // the start of word after space
+                }
+            }
+
+            // copy sname
+            // char* temp_sname[strlen(sname)];
+            // temp_sname[0] = ' ';
+            // strcat(temp_sname, sname);
+
+            // is match? (asterisk at end) 
+            char* temp_temp_sname;
+            for(int n = 0; n < num_space; n++){
+                printf("%s \n", string);
+                printf("%s \n", sname);
+                printf("%d \n", wordstart[n]);
+                int matched = is_match(string, sname, wordstart[n ]);
+                if(matched){ // 这里总是match不上
+                    
+                    // if(n+1 < num_space){
+                        
+                        temp_temp_sname = substring(string, wordstart[n], wordstart[n+1]-2);
+                        old_length = strlen(temp_temp_sname);
+                        int m = 0;      
+                        pos = strstr(string, temp_temp_sname);                     
+                        while ((pos = strstr(string, temp_temp_sname)) != NULL)
+                        {
+                            printf("%s \n", pos);
+                            // Backup current line
+                            strcpy(temp, string);
+
+                            // Index of current found word
+                            index = pos - string;
+
+                            // Terminate str after word found index
+                            string[index] = '\0';
+
+                            // Concatenate str with new word 
+                            strcat(string, rname);
+
+                            // Concatenate str with remaining words after oldword found index.
+                            strcat(string, temp + index + old_length);
+
+                            // printf("214");
+                        }
+                        free(temp_temp_sname);
+                    // }
+                }
+            }
+
+
+            // int m = 0;
+            // while ((pos = strstr(string, temp_sname)) != NULL)
+            // {
+            //     printf("%s \n", pos);
+            //     // Backup current line
+            //     strcpy(temp, string);
+
+            //     // Index of current found word
+            //     index = pos - string;
+
+
+            //     // Terminate str after word found index
+            //     string[index] = '\0';
+
+            //     // Concatenate str with new word 
+            //     strcat(string, rname);
+                
+            //     // Concatenate str with remaining words after oldword found index.
+            //     strcat(string, temp + index + old_length);
+
+            //     // printf("214");
+            // }
+            
             fputs(string, output);
             free(string);
         }
