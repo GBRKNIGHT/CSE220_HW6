@@ -2,128 +2,18 @@
 
 
 
-// Function to find -s in an array of strings, return error (-999) if not found. 
-// If found, return the position of it. 
-// int detect_dash_s(char* substrings[])
-// {
-//     int result = -999;
-//     int size = sizeof(substrings);
-//     int occur_signal = 0;
-//     for(int i = 0; i < size; i++)
-//     {
-//         if(strlen(substrings[i]) != 2)
-//         {
-//             // if length != 2, continue
-//             continue;
-//         }
-//         char* substring = substrings[i];
-//         char* dash_s = "-s";
-//         char* p_strstr = strstr(substring, dash_s);
-//         if(p_strstr){
-//             occur_signal ++;
-//             result = i;
-//         }
-//         if(occur_signal > 1){
-//             return -888; // return -888 if DUPLICATE_ARGUMENT
-//         }
-//     }
-//     return result;
-// }
-
-
-// Function to find -r in an array of strings, return error (-999) if not found. 
-// If found, return the position of it. 
-//int detect_dash_r(char* substrings[])
-// {
-//     int result = -999;
-//     int size = sizeof(substrings);
-//     int occur_signal = 0;
-//     for(int i = 0; i < size; i++)
-//     {
-//         if(strlen(substrings[i]) != 2)
-//         {
-//             // if length != 2, continue
-//             continue;
-//         }
-//         char* substring = substrings[i];
-//         char* dash_s = "-r";
-//         char* p_strstr = strstr(substring, dash_s);
-//         if(p_strstr){
-//             result = i;
-//             occur_signal ++;
-//         }
-//         if(occur_signal > 1){
-//             return -888; // return -888 if DUPLICATE_ARGUMENT
-//         }       
-//     }
-//     return result;
-// }
-
-
-// Function to find -w in an array of strings, return error (-999) if not found. 
-// If found, return the position of it. 
-// int detect_dash_w(char* substrings[])
-// {
-//     int result = -999;
-//     int size = sizeof(substrings);
-//     int occur_signal = 0;
-//     for(int i = 0; i < size; i++)
-//     {
-//         if(strlen(substrings[i]) != 2)
-//         {
-//             // if length != 2, continue
-//             continue;
-//         }
-//         char* substring = substrings[i];
-//         char* dash_s = "-w";
-//         char* p_strstr = strstr(substring, dash_s);
-//         if(p_strstr){
-//             result = i;
-//             occur_signal++;
-//         }
-//         if(occur_signal > 1){
-//             return -888; // return -888 if DUPLICATE_ARGUMENT
-//         }
-//     }
-//     return result;
-// }
-
-
-// Function to find -l in an array of strings, return error (-999) if not found. 
-// If found, return the position of it. 
-// int detect_dash_l(char* substrings[])
-// {
-//     int result = -999;
-//     int size = sizeof(substrings);
-//     int occur_signal = 0;
-//     for(int i = 0; i < size; i++)
-//     {
-//         if(strlen(substrings[i]) != 2)
-//         {
-//             // if length != 2, continue
-//             continue;
-//         }
-//         char* substring = substrings[i];
-//         char* dash_s = "-l";
-//         char* p_strstr = strstr(substring, dash_s);
-//         if(p_strstr){
-//             result = i;
-//             occur_signal++;
-//         }
-//         if(occur_signal > 1){
-//             return -888; // return -888 if DUPLICATE_ARGUMENT
-//         }
-//     }
-//     return result;
-// }
-
-
 long num[2] = {0, 0};
 long start = 0;
 
 unsigned int is_wolf_invalid(char* wolf){
     unsigned int result = 1;
     int length = strlen(wolf);
+    int check_asterisk = 0;
+    for(int i = 0; i < length; i++){
+        if(wolf[i] == '*'){
+            check_asterisk = 1;
+        }
+    }
     int char_zero = (wolf[0] == '*'); // if char0 is *
     if(char_zero == 0){
         for(int i = 1; i < length - 1; i++){
@@ -131,12 +21,9 @@ unsigned int is_wolf_invalid(char* wolf){
                 return -999; // not valid if * appears in the mid of string. 
             }
         }
-        if(wolf[length] != '*'){
-            // if no * in the string
-            return -999;
-        }
     }
     else{ // if char0 is *, it is valid search no whether what.
+        printf("HEREHERE\n");
         if(wolf[strlen(wolf) - 1] == '*'){
             // if the last char is also '*', then it is an error. 
             return -999;
@@ -148,6 +35,10 @@ unsigned int is_wolf_invalid(char* wolf){
         }
 
         return 1;
+    }
+    // if no asterisks appears, return error 7. 
+    if(check_asterisk == 0){
+        return -999;
     }
     return result; 
 }
@@ -231,6 +122,26 @@ int detect_dash_r(char* substrings[])
 */
 
 
+int is_match(char* str1, char* s_str, int start_at){
+    for(int i = 0; i < strlen(s_str); i++){
+        if(str1[start_at + i] != s_str[i]) return 0;
+    }
+    return 1;
+}
+
+
+// substring function 
+char* substring(char* str, int start, int end){
+    char* result;
+    result = malloc(end - start + 1);
+    for(int i = 0; i < strlen(result); i++){
+        result[i] = str[i + start];
+    }
+    result[strlen(result)] = '\0';
+    return result; 
+}
+
+
 int main(int argc, char **argv)
 {
     // plan to return error value after deal with things. 
@@ -260,7 +171,6 @@ int main(int argc, char **argv)
     int c;
 
 	int s_flag=0, l_flag = 0, r_flag=0, w_flag=0, debug = 0;
-
 	char *sname = "default_sname";
     char *rname = "default_rname";
     char *lname = "default_lname";
@@ -273,6 +183,7 @@ int main(int argc, char **argv)
     int w_check = 0;
     int valid_wolf = 0;
     int l_num_count = 0;
+
 	while ((c = getopt(argc, argv, "s:r:wl:io")) != -1){
         // s: -s, r:-r, l:-l, i: input file, o:output file
         //printf("111");
@@ -344,21 +255,14 @@ int main(int argc, char **argv)
                     l_arguments_invalid = 1;
                 }
                 //  printf("%d\n", l_arguments_invalid);
-                // this part should work 
                 if((unsigned int)long_zero > MAX_LINE)
                 {
                     l_arguments_invalid = 1;
                 }
                //  printf("%d\n", l_arguments_invalid);
-                // if ((unsigned int) long_one > MAX_LINE){
-                //     l_arguments_invalid = 1;
-                // }
                 if(long_zero > long_one){
                     l_arguments_invalid = 1;
                 }
-                // if((long_one - long_zero) > 20){
-                //     l_arguments_invalid = 1;
-                // }
                 l_flag = 1;
 				break;
             }
@@ -366,19 +270,6 @@ int main(int argc, char **argv)
 				debug = 1;
 				break;
             }
-            // case 'i':{
-            //     *iname = argv[optind];
-            //     // second last argument
-            //     i_check++;
-            //     break;
-            // }
-            // case 'o':{
-            //     *oname = argv [optind + 1];
-            //     // last argument
-            //     // argv[argc] will be NULL. 
-            //     o_check++;
-            //     break;
-            // }
             default: 
                 break;
 		}
@@ -410,6 +301,7 @@ int main(int argc, char **argv)
     char* output_file = argv[optind + 1]; 
 
     if(input_file[0] == '-' || input_file[0] == '/'){
+        
         input_file_missing = 1;
     }
     if(output_file[0] == '-' || output_file[0] == '/'){
@@ -456,6 +348,7 @@ int main(int argc, char **argv)
     }
     
     if(valid_wolf == -999){
+        
         wildcard_invalid = 1;
     }
 	
@@ -468,27 +361,35 @@ int main(int argc, char **argv)
 		printf("no arguments left to process\n");
 	}
     if(missing_argument){
+        // printf("HEREHERE\n");
         return MISSING_ARGUMENT;
     }
     if(duplicate_argument){
+        // printf("HEREHERE\n");
         return DUPLICATE_ARGUMENT;
     }
     if(input_file_missing){
+        printf("HEREHERE 2\n");
         return INPUT_FILE_MISSING;
     }
     if(output_file_unwritable){
+        printf("HEREHERE 3\n");
         return OUTPUT_FILE_UNWRITABLE;
     }
     if(s_argument_missing){
+        printf("HEREHERE 4\n");
         return S_ARGUMENT_MISSING;
     }
     if(r_argument_missing){
+        printf("HEREHERE 5\n");
         return R_ARGUMENT_MISSING;
     }
     if(l_arguments_invalid){
+        printf("HEREHERE 6\n");
         return L_ARGUMENT_INVALID;
     }
     if(wildcard_invalid){
+        printf("HEREHERE 7\n");
         return WILDCARD_INVALID;
     }
 
@@ -509,8 +410,8 @@ int main(int argc, char **argv)
     }
     
     FILE* input_temp = input;
-    // write the part before the replacement start. 
-    if(l_check == 0){
+    // if never detected l, then replace all words in the input passage. 
+    if(l_check == 0 && w_check == 0){
         while (1)
         {
             int j = 0;
@@ -525,6 +426,7 @@ int main(int argc, char **argv)
             // bytes_read = getline (&string, &size, input_temp);
             printf("563 %d\n", bytes_read);
             if (bytes_read == EOF){
+                free(string);
                 break;
             }
             j++;
@@ -563,8 +465,166 @@ int main(int argc, char **argv)
         }
         
     }
+    // if wildcard applies to the whole passage. 
+    else if (l_check == 0 && w_check == 1){
+        
+        while (1)
+        {
+            int j = 0;
+            int bytes_read;
+            size_t size = 200;
+            char *string;
+
+            string = (char *) malloc (size);
+            bytes_read = getline (&string, &size, input_temp);
+            printf("563 %d\n", bytes_read);
+            if (bytes_read == EOF){
+                free(string);
+                break;
+            }
+            j++;
+
+
+            // Following code inspired by: 
+            // https://codeforwin.org/c-programming/c-program-find-and-replace-a-word-in-file
+
+            char* pos, temp[1000];
+            int old_length = strlen(sname);
+            int index = 0;
+            // int new_length = strlen(new_word);
+            if(sname[0] == '*'){
+                // if '*' at begin 
+                while ((pos = strstr(string, sname)) != NULL)
+                {
+                    // Backup current line
+                    strcpy(temp, string);
+
+                    // Index of current found word
+                    index = pos - string;
+
+                    // // Terminate str after word found index
+                    string[index] = '\0';
+
+                    // Concatenate str with new word 
+                    strcat(string, rname);
+                    
+                    // Concatenate str with remaining words after 
+                    // oldword found index.
+                    strcat(string, temp + index + old_length);
+
+                    // printf("214");
+                }
+            }
+
+            else if (sname [strlen(sname) - 1] == '*'){
+                // if '*' at end, goes to else statement, why?? 
+                sname[strlen(sname + 1)] = '\0';
+                printf("%s \n", sname);
+            }
+            else{
+                int num_space = 0;
+                // find how many words there are. 
+                for(int m = 0; m < strlen(string); m++){
+                    if(isspace(string[m])){
+                        num_space++;
+                    }
+                }
+
+
+                // save the positions of where each word begins. 
+                int* wordstart[num_space + 1] ;
+                int cur_start = 0;
+                wordstart[cur_start] = 0;
+
+                for(int m = 0; m < strlen(string); m++){
+                    if(isspace(string[m])){
+                        cur_start++;
+                        wordstart[cur_start] = (m+1); // the start of word after space
+                    }
+                }
+
+                // copy sname
+                char* temp_sname[strlen(sname + 1)];
+                temp_sname[0] = ' ';
+                strcat(temp_sname, sname);
+
+                // is match? (asterisk at end) 
+                char* temp_temp_sname;
+                for(int n = 0; n < num_space; n++){
+                    printf("%s \n", string);
+                    printf("%s \n", temp_sname);
+                    printf("%d \n", wordstart[n]);
+                    int matched = is_match(string, temp_sname, wordstart[n ]);
+                    
+                    if(matched){
+                        if(n+1 < num_space){
+                            
+                            temp_temp_sname = substring(string, wordstart[n], wordstart[n+1]-2);
+                            old_length = strlen(temp_temp_sname);
+                            int m = 0;      
+                            pos = strstr(string, temp_temp_sname);                     
+                            while ((pos = strstr(string, temp_temp_sname)) != NULL)
+                            {
+                                printf("%s \n", pos);
+                                // Backup current line
+                                strcpy(temp, string);
+
+                                // Index of current found word
+                                index = pos - string;
+
+                                // Terminate str after word found index
+                                string[index] = '\0';
+
+                                // Concatenate str with new word 
+                                strcat(string, rname);
+
+                                // Concatenate str with remaining words after oldword found index.
+                                strcat(string, temp + index + old_length);
+
+                                // printf("214");
+                            }
+                            free(temp_temp_sname);
+                        }
+
+                    }
+                }
+
+
+                // int m = 0;
+                // while ((pos = strstr(string, temp_sname)) != NULL)
+                // {
+                //     printf("%s \n", pos);
+                //     // Backup current line
+                //     strcpy(temp, string);
+
+                //     // Index of current found word
+                //     index = pos - string;
+
+
+                //     // Terminate str after word found index
+                //     string[index] = '\0';
+
+                //     // Concatenate str with new word 
+                //     strcat(string, rname);
+                    
+                //     // Concatenate str with remaining words after oldword found index.
+                //     strcat(string, temp + index + old_length);
+
+                //     // printf("214");
+                // }
+            }
+            fputs(string, output);
+            free(string);
+        }
+    }
+    
+    // if wildcard applies to given -l range
+    else if(w_check == 1){
+
+    }
     else{
         int j = 0;
+        // before replacement
         while (j < num[0] - 1){
             int bytes_read;
             size_t size = 200;
@@ -611,24 +671,21 @@ int main(int argc, char **argv)
             {
                 // Backup current line
                 strcpy(temp, string);
-
                 // Index of current found word
                 index = pos - string;
-
                 // // Terminate str after word found index
                 string[index] = '\0';
-
                 // Concatenate str with new word 
                 strcat(string, rname);
-                
                 // Concatenate str with remaining words after 
                 // oldword found index.
                 strcat(string, temp + index + old_length);
-
             }
             fputs(string, output);
             free(string);
         }
+
+        // after replacement
         while (1){
             int bytes_read;
             size_t size = 200;
