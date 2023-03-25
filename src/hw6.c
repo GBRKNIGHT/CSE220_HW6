@@ -319,17 +319,17 @@ int main(int argc, char **argv)
             {
                 l_check++;
                 lname = optarg;
-                // need to split the 10,13 by comma here
 
+                // need to split the 10,13 by comma here
                 int comma_loc = find_comma(lname);
                 if(comma_loc == -999){
                     l_arguments_invalid = 1;
                 }
-            //     printf("%d\n", l_arguments_invalid);
+                //     printf("%d\n", l_arguments_invalid);
                 if((long unsigned int)comma_loc == strlen(lname)){
                     l_arguments_invalid = 1;
                 }
-            //     printf("%d\n", l_arguments_invalid);
+                //     printf("%d\n", l_arguments_invalid);
 
 
                 //int num[2] = {0, 0};
@@ -345,9 +345,6 @@ int main(int argc, char **argv)
                 //printf("%d\n", l_arguments_invalid);
                 //printf("%d %d \n", num[0], num[1]);
 
-
-
-
                 
                 // long long_zero = strtol(str_zero, strlen(str_zero), 10);
                 // long long_one = strtol(str_one, strlen(str_one), 10);
@@ -356,11 +353,11 @@ int main(int argc, char **argv)
                 if((long_zero < 0) || (long_one < 0)){
                     l_arguments_invalid = 1;
                 }
-               //  printf("%d\n", l_arguments_invalid);
+                //  printf("%d\n", l_arguments_invalid);
                 if(long_zero > long_one){
                     l_arguments_invalid = 1;
                 }
-               //  printf("%d\n", l_arguments_invalid);
+                //  printf("%d\n", l_arguments_invalid);
                 // this part should work 
                 if((unsigned int)long_zero > MAX_LINE)
                 {
@@ -373,9 +370,9 @@ int main(int argc, char **argv)
                 if(long_zero > long_one){
                     l_arguments_invalid = 1;
                 }
-                if((long_one - long_zero) > 20){
-                    l_arguments_invalid = 1;
-                }
+                // if((long_one - long_zero) > 20){
+                //     l_arguments_invalid = 1;
+                // }
                 l_flag = 1;
 				break;
             }
@@ -589,6 +586,7 @@ int main(int argc, char **argv)
             string = (char *) malloc (size);
             bytes_read = getline (&string, &size, input_temp);   
             if (bytes_read == EOF){
+                free(string);
                 break;
             }     
             j++;
@@ -607,16 +605,15 @@ int main(int argc, char **argv)
 
             string = (char *) malloc (size);
             bytes_read = getline (&string, &size, input_temp);
-            // bytes_read = getline (&string, &size, input_temp);
-            printf("563 %d\n", bytes_read);
             if (bytes_read == EOF){
+                free(string);
                 break;
             }
             j++;
             // printf(bytes_read);
             //replace(string, sname, rname);
 
-            // The following function is inspired by this website: 
+            // The following codes is inspired by this website: 
             // https://codeforwin.org/c-programming/c-program-find-and-replace-a-word-in-file
 
             char* pos, temp[1000];
@@ -642,7 +639,6 @@ int main(int argc, char **argv)
                 // oldword found index.
                 strcat(string, temp + index + old_length);
 
-            // printf("214");
             }
             fputs(string, output);
             free(string);
@@ -654,6 +650,7 @@ int main(int argc, char **argv)
             string = (char *) malloc (size);
             bytes_read = getline (&string, &size, input_temp);   
             if (bytes_read == EOF){
+                free(string);
                 break;
             }    
 
