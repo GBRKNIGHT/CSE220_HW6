@@ -4,3 +4,5 @@ bin/hw6 -s pro* -r TURING -w tests.in/wildcard_search02.in.txt tests.out/wildcar
 text for wildcard_search02
 bin/hw6 -s mac* -r device -w -l 23,23 tests.in/wildcard_search03.in.txt tests.out/STUPID.txt
 text for wildcard_search03 
+bin/hw6 -s Manche* -r MANCHESTER -w tests.in/wildcard_search06.in.txt tests.out/STUPID.txt
+text for wildcard_search06

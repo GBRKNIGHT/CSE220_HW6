@@ -678,19 +678,24 @@ int main(int argc, char **argv)
                     }
                     begin = fr_ptr + end - 1;
                 }
-
+                char save_char_MANCHESTER[2];
+                int entered_here = 0;
                 if (back_flag)
                 {
                     begin = pos - string;
                     int bk_ptr = 0;
-                    // if(start_match){
-                    //     bk_ptr = 1;
-                    //     start_match = 0;
-                    //     continue;
-                    // }
-                    while((isspace(pos[bk_ptr + 1]) == 0) && (isspace(pos[bk_ptr]) == 0)) 
+                    while(((isspace(pos[bk_ptr + 1]) == 0)|| (pos[bk_ptr + 1]) == '\n')
+                        && ((isspace(pos[bk_ptr]) == 0)||( (pos[bk_ptr]) == '\n')) )
                     {
-                        printf("%c ", *(pos+bk_ptr));
+                        entered_here = 1;
+                        printf("%c ", *(pos+bk_ptr + 1));
+                        if(ispunct(*(pos+bk_ptr + 1))){
+                            // char save_char[2];
+                            save_char_MANCHESTER[0] = *(pos+bk_ptr + 1);
+                            save_char_MANCHESTER[1] = '\0';
+                            printf("%s \n", save_char_MANCHESTER);
+                            strcat(rname, save_char_MANCHESTER);
+                        }
                         bk_ptr++;
                     }
                     end = bk_ptr + begin;
@@ -710,19 +715,30 @@ int main(int argc, char **argv)
                 // Concatenate str with new word 
                 // strcat(rname, ' ');
                 strcat(string, rname);
+                
+                // delete once if previous added punctuation
+                if(ispunct(rname[strlen(rname) - 1])){
+                    printf("THIS IS RNAME %s \n", rname);
+                    rname[strlen(rname) - 1] = '\0';
+                }
+                
+                
                 // printf(" punct = %c \n",string[old_length + index - 1]);
                 int end_with_punct = 0;
                 
                 // find if this word is end with punctuation
+                int enter_here = 0;
+                printf("%c YGUJHKTY\n", string[old_length - 1 + index]);
+                
                 if(ispunct(string[old_length - 1 + index])){
+                    enter_here = 1;
                     printf("this is %d \n" , old_length + 1);
                     end_with_punct = 1;
                     char save_char[2];
                     save_char[0] = string[old_length - 1 + index];
                     save_char[1] = '\0';
-                    strcat(string, save_char);
+                    printf("%s \n", save_char);
                 }
-
                 
                 // Concatenate str with remaining words after 
                 // oldword found index.
