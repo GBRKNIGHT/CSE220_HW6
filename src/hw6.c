@@ -596,7 +596,7 @@ int main(int argc, char **argv)
             printf("I am 590 \n");
             int bytes_read;
             size_t size = 200;
-            char *string = malloc (200 * sizeof(char));
+            char *string = (char*)malloc (200 * sizeof(char));
             bytes_read = getline (&string, &size, input_temp);
             // bytes_read = getline (&string, &size, input_temp);
             // printf("563 %d\n", bytes_read);
@@ -614,10 +614,31 @@ int main(int argc, char **argv)
             
             int index = 0;
             printf("%d: ", j);
+            
             while ((pos = strstr(string+index, real_sname)) != NULL)
             {
                 // Check if the word is valid to replace
                 printf("%ld ", pos-string);
+                int start_match = 0;
+                if(pos - string == 0){
+                    int first_space = 0;
+                    while(string[first_space] != ' '){
+                        first_space++;
+                    }
+                    start_match = 1;
+                    strcpy(temp, string);
+
+                    // Index of current found word
+                    index = pos - string;
+
+                    // // Terminate str after word found index
+                    string[index] = '\0';
+                    // Concatenate str with new word 
+                    // strcat(rname, ' ');
+                    strcat(string, rname);
+                    strcat(string, temp + index + first_space);
+                }
+
                 char* temp_str[10000];
                 if(pos == string || pos == NULL){
                     break;
@@ -625,7 +646,8 @@ int main(int argc, char **argv)
                 int is_space_pos_one  = isspace(*(pos-1));
                 int is_punc_pos_one = ispunct(*(pos-1));
                 
-                
+               
+
                 if (front_flag && ((is_space_pos_one) && (is_punc_pos_one)))
                 {
                     
@@ -633,15 +655,17 @@ int main(int argc, char **argv)
                     continue;
                 }
 
-                // if this is back* and previous is space or punctuation
-                if (back_flag && ((is_space_pos_one == 0) && (is_punc_pos_one == 0)))
+                
+                // if this is back* and previous is not space or punctuation
+                if (back_flag && ((is_space_pos_one == 0) && (is_punc_pos_one == 0) ) )
                 {
                     
                     index = pos + strlen(real_sname) - string ;
                     continue;
                 }
                 int begin = 0, end = 0;
-                
+            
+
                 if (front_flag)
                 {
                     end = pos + strlen(real_sname) - string;
@@ -659,10 +683,13 @@ int main(int argc, char **argv)
                 {
                     begin = pos - string;
                     int bk_ptr = 0;
-                    
+                    // if(start_match){
+                    //     bk_ptr = 1;
+                    //     start_match = 0;
+                    //     continue;
+                    // }
                     while((isspace(pos[bk_ptr + 1]) == 0) && (isspace(pos[bk_ptr]) == 0)) 
                     {
-                        
                         printf("%c \n", *(pos+bk_ptr));
                         bk_ptr++;
                     }
@@ -672,7 +699,6 @@ int main(int argc, char **argv)
                 int old_length = end - begin + 1;
 
                 // Backup current line
-                
                 strcpy(temp, string);
 
                 // Index of current found word
