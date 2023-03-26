@@ -8,3 +8,5 @@ bin/hw6 -s Manche* -r MANCHESTER -w tests.in/wildcard_search06.in.txt tests.out/
 text for wildcard_search06
 bin/hw6 -w -s Tur* -r TURING\ THE\ GREAT tests.in/wildcard_search07.in.txt tests.out/wildcard_search07.out.txt
 text for wildcard_search07
+bin/hw6 -s Hom* -r This\ homework\ is\ effortless. -w tests.in/wildcard_search08.in.txt tests.out/STUPID.txt
+text for wildcard_search08

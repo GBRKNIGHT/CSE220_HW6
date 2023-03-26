@@ -600,7 +600,7 @@ int main(int argc, char **argv)
         {
             int bytes_read;
             size_t size = 200;
-            char *string = (char*)malloc (200 * sizeof(char));
+            char *string = (char*)malloc (200);
             bytes_read = getline (&string, &size, input_temp);
             // bytes_read = getline (&string, &size, input_temp);
             // printf("563 %d\n", bytes_read);
@@ -625,8 +625,14 @@ int main(int argc, char **argv)
                 printf("%ld ", pos-string);
                 int start_match = 0;
                 if(pos - string == 0){
+
+                    
                     int first_space = 0;
-                    while(string[first_space] != ' '){
+                    int loop_counter = 0;
+                    while(isspace(string[first_space]) == 0){
+                        printf("Not dumped yet \n");
+                        loop_counter++;
+                        if(loop_counter > strlen(string)) break;
                         first_space++;
                     }
                     start_match = 1;
@@ -638,7 +644,6 @@ int main(int argc, char **argv)
                     // // Terminate str after word found index
                     string[index] = '\0';
                     // Concatenate str with new word 
-                    // strcat(rname, ' ');
                     strcat(string, rname);
                     strcat(string, temp + index + first_space);
                     continue;
@@ -837,7 +842,10 @@ int main(int argc, char **argv)
                 int start_match = 0;
                 if(pos - string == 0){
                     int first_space = 0;
+                    int loop_counter = 0;
                     while(string[first_space] != ' '){
+                        loop_counter ++;
+                        if(loop_counter > strlen(string)) break;
                         first_space++;
                     }
                     start_match = 1;
