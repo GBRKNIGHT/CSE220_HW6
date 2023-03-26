@@ -468,7 +468,96 @@ int main(int argc, char **argv)
             fputs(string, output);
             free(string);
         }
-        
+        return 0;
+    }
+
+    
+    // simple search with -l range. 
+    else if (l_check == 1 && w_check == 0){
+        int j = 0;
+        while (j < num[0] - 1){
+            int bytes_read;
+            size_t size = 200;
+            char *string;
+            string = (char *) malloc (size);
+            bytes_read = getline (&string, &size, input_temp);   
+            if (bytes_read == EOF){
+                free(string);
+                break;
+            }     
+            j++;
+            fputs(string, output);
+            free(string);
+        }
+        while(j <= (num[1])){
+            printf(" STUPID %d\n", (int)(num[1] - num[0]+1));
+            // replace(input_temp, sname, rname);
+            // fputs(input_temp, output);
+            int bytes_read;
+            size_t size = 200;
+            char *string;
+
+            string = (char *) malloc (size);
+            bytes_read = getline (&string, &size, input_temp);
+            if (bytes_read == EOF){
+                free(string);
+                break;
+            }
+            j++;
+            // printf(bytes_read);
+            //replace(string, sname, rname);
+
+            // The following codes is inspired by this website: 
+            // https://codeforwin.org/c-programming/c-program-find-and-replace-a-word-in-file
+
+            char* pos, temp[1000];
+            int old_length = strlen(sname);
+            // int new_length = strlen(new_word);
+            int index = 0;
+
+            while ((pos = strstr(string, sname)) != NULL)
+            {
+                // Backup current line
+                strcpy(temp, string);
+
+                // Index of current found word
+                index = pos - string;
+
+                // // Terminate str after word found index
+                string[index] = '\0';
+
+                // Concatenate str with new word 
+                strcat(string, rname);
+                
+                // Concatenate str with remaining words after 
+                // oldword found index.
+                strcat(string, temp + index + old_length);
+
+            }
+            fputs(string, output);
+            free(string);
+        }
+                while (1){
+            int bytes_read;
+            size_t size = 200;
+            char *string;
+            string = (char *) malloc (size);
+            bytes_read = getline (&string, &size, input_temp);   
+            if (bytes_read == EOF){
+                free(string);
+                break;
+            }    
+
+            if(bytes_read == 0){
+                break;
+            } 
+            j++;
+            fputs(string, output);
+            free(string);
+        }
+        fclose(input);
+        fclose(output);
+        return 0;
     }
 
     // if wildcard applies to the whole passage. 
