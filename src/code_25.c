@@ -864,3 +864,16 @@
     
 // 	exit(0);
 // }
+
+
+
+
+                // // find if this word is end with punctuation
+                // if(ispunct(string[old_length - 1 + index])){
+                //     printf("this is %d \n" , old_length + 1);
+                //     end_with_punct = 1;
+                //     char save_char[2];
+                //     save_char[0] = string[old_length - 1 + index];
+                //     save_char[1] = '\0';
+                //     strcat(rname, save_char);
+                // }

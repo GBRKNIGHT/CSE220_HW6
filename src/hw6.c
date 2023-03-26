@@ -593,7 +593,6 @@ int main(int argc, char **argv)
         int j = 0;
         while (1)
         {
-            printf("I am 590 \n");
             int bytes_read;
             size_t size = 200;
             char *string = (char*)malloc (200 * sizeof(char));
@@ -690,7 +689,7 @@ int main(int argc, char **argv)
                     // }
                     while((isspace(pos[bk_ptr + 1]) == 0) && (isspace(pos[bk_ptr]) == 0)) 
                     {
-                        printf("%c \n", *(pos+bk_ptr));
+                        printf("%c ", *(pos+bk_ptr));
                         bk_ptr++;
                     }
                     end = bk_ptr + begin;
@@ -710,6 +709,18 @@ int main(int argc, char **argv)
                 // Concatenate str with new word 
                 // strcat(rname, ' ');
                 strcat(string, rname);
+                // printf(" punct = %c \n",string[old_length + index - 1]);
+                int end_with_punct = 0;
+                
+                // find if this word is end with punctuation
+                if(ispunct(string[old_length - 1 + index])){
+                    printf("this is %d \n" , old_length + 1);
+                    end_with_punct = 1;
+                    char save_char[2];
+                    save_char[0] = string[old_length - 1 + index];
+                    save_char[1] = '\0';
+                    strcat(string, save_char);
+                }
 
                 
                 // Concatenate str with remaining words after 
