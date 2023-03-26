@@ -471,7 +471,7 @@ int main(int argc, char **argv)
         
     }
 
-    
+
     // simple search with -l range. 
     else if (l_check == 1 && w_check == 0){
         int j = 0;
@@ -562,6 +562,7 @@ int main(int argc, char **argv)
 
     // if wildcard applies to the whole passage. 
     else if (l_check == 0 && w_check == 1){
+        
         int front_flag = 0, back_flag = 0;
         char* real_sname = (char*) malloc(strlen(sname) + 1);
         if(sname[0] == '*') {
@@ -569,6 +570,7 @@ int main(int argc, char **argv)
             real_sname = substring(sname, 1 , strlen(sname) - 1);
         }
         if(sname[strlen(sname)-1] == '*') {
+            
             back_flag = 1;
             int substr_start = 0;
             int substr_end = strlen(sname) - 2;
@@ -578,6 +580,7 @@ int main(int argc, char **argv)
                 real_sname[i] = sname[i + start];
             }
             real_sname[i] = '\0';
+            
         }
         int j = 0;
         while (1)
@@ -586,6 +589,7 @@ int main(int argc, char **argv)
             size_t size = 200;
             char *string;
 
+            
             string = (char *) malloc (size);
             bytes_read = getline (&string, &size, input_temp);
             // bytes_read = getline (&string, &size, input_temp);
@@ -595,36 +599,37 @@ int main(int argc, char **argv)
                 break;
             }
             j++;
-            // printf(bytes_read);
-            //replace(string, sname, rname);
             // Following code inspired by: 
             // https://codeforwin.org/c-programming/c-program-find-and-replace-a-word-in-file
 
             char* pos, temp[10000];
             
-            // int new_length = strlen(new_word);
+           
             
             int index = 0;
             printf("%d: ", j);
             while ((pos = strstr(string+index, real_sname)) != NULL)
             {
                 // Check if the word is valid to replace
-                printf("%d ", pos-string);
+                printf("%ld ", pos-string);
                 char* temp_str[10000];
-                int is_space_pos_one  = isspace((pos-1));
-                int is_punc_pos_one = ispunct((pos-1));
-
-                // int front_flag_cond = (is_space_pos_one && is_punc_pos_one);
+                
+                int is_space_pos_one  = isspace((char)(pos-1));
+                int is_punc_pos_one = ispunct((char)(pos-1));
+                
+                
                 if (front_flag && (is_space_pos_one && is_punc_pos_one))
                 {
+                    
                     index = pos - string + 1; 
                     continue;
                 }
 
-                // int back_flag_cond = ((is_space_pos_one == 0) && (is_punc_pos_one == 0));
+                // if this is back* and previous is space or punctuation
                 if (back_flag && ((is_space_pos_one == 0) && (is_punc_pos_one == 0)))
                 {
-                    index = pos - string + strlen(real_sname);  
+                    
+                    index = pos + strlen(real_sname) - string ;
                     continue;
                 }
                 int begin = 0, end = 0;
@@ -633,7 +638,7 @@ int main(int argc, char **argv)
                 {
                     end = pos + strlen(real_sname) - string;
                     int fr_ptr = 0;
-                    while((isspace(*(pos+fr_ptr)) == 0 )&& (ispunct(*(pos+fr_ptr)) == 0)) 
+                    while((isspace((char)(pos+fr_ptr)) == 0 ) && (ispunct((char)(pos+fr_ptr)) == 0)) 
                     {
                         fr_ptr--;
                         /* code */
@@ -643,22 +648,27 @@ int main(int argc, char **argv)
 
                 if (back_flag)
                 {
+                    
                     begin = pos - string;
-                    int fr_ptr = 0;
-                    while((isspace(pos[fr_ptr]) == 0 )&& ispunct(pos[fr_ptr]) == 0) 
+                    int bk_ptr = 0;
+                    
+                    while((isspace((char)pos+ bk_ptr) == 0 )&& ispunct((char)pos + bk_ptr) == 0) 
                     {
-                        fr_ptr++;
+                        
+                        bk_ptr++;
                         /* code */
                     }
-                    end = fr_ptr + begin;
+                    end = bk_ptr + begin;
                 }
 
-                int old_length = end - begin;
+                int old_length = end - begin + 1;
+
                 // Backup current line
+                
                 strcpy(temp, string);
 
                 // Index of current found word
-                index = begin;
+                index = pos - string;
 
                 // // Terminate str after word found index
                 string[index] = '\0';
