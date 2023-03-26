@@ -477,7 +477,14 @@ int main(int argc, char **argv)
         char* real_sname = (char*) malloc(strlen(sname) + 1);
         if(sname[0] == '*') {
             front_flag = 1;
-            real_sname = substring(sname, 1 , strlen(sname) - 1);
+            // real_sname = substring(sname, 1 , strlen(sname) - 1);
+            int substr_start = 1;
+            int substr_end = strlen(sname) - 1;
+            int i = 0;
+            for(i = 0; i < substr_end - substr_start + 1; i++){
+                real_sname[i] = sname[i + start];
+            }
+            real_sname[i] = '\0';
         }
         if(sname[strlen(sname)-1] == '*') {
             back_flag = 1;
@@ -595,6 +602,30 @@ int main(int argc, char **argv)
     
     // if wildcard applies to given -l range
     else if (l_check){
+        int front_flag = 0, back_flag = 0;
+        char* real_sname = (char*) malloc(strlen(sname) + 1);
+        if(sname[0] == '*') {
+            front_flag = 1;
+            // real_sname = substring(sname, 1 , strlen(sname) - 1);
+            int substr_start = 1;
+            int substr_end = strlen(sname) - 1;
+            int i = 0;
+            for(i = 0; i < substr_end - substr_start + 1; i++){
+                real_sname[i] = sname[i + start];
+            }
+            real_sname[i] = '\0';
+        }
+        if(sname[strlen(sname)-1] == '*') {
+            back_flag = 1;
+            int substr_start = 0;
+            int substr_end = strlen(sname) - 2;
+            // real_sname = (char*)malloc((substr_end - substr_start + 1));
+            int i = 0;
+            for(i = 0; i < substr_end - substr_start + 1; i++){
+                real_sname[i] = sname[i + start];
+            }
+            real_sname[i] = '\0';
+        }
         int j = 0;
         // before replacement
         while (j < num[0] - 1){
