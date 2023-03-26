@@ -2,3 +2,5 @@ bin/hw6 -s re*  -r "New York"  -w  tests.in.orig/unix.txt tests.out/STUPID.txt
 text for wildcard_search01
 bin/hw6 -s pro* -r TURING -w tests.in/wildcard_search02.in.txt tests.out/wildcard_search02.out.txt
 text for wildcard_search02
+bin/hw6 -s mac* -r device -w -l 23,23 tests.in/wildcard_search03.in.txt tests.out/STUPID.txt
+text for wildcard_search03 

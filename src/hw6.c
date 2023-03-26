@@ -402,13 +402,13 @@ int main(int argc, char **argv)
 
     // part2 codes.
     printf("I am 404 \n");
+    
     // char *search_text = sname;
     // char *replacement_text = rname;
     FILE* input = fopen(input_file, "r");// read only
     if(input == NULL){ 
         return INPUT_FILE_MISSING;
     }
-
     FILE* output = fopen(output_file, "w"); // write only 
     if (output == NULL){
         return OUTPUT_FILE_UNWRITABLE;
@@ -416,6 +416,7 @@ int main(int argc, char **argv)
     
     FILE* input_temp = input;
     // if never detected l, then replace all words in the input passage. 
+    
     if(l_check == 0 && w_check == 0){
         while (1)
         {
@@ -472,7 +473,6 @@ int main(int argc, char **argv)
         }
         
     }
-
 
     // simple search with -l range. 
     else if (l_check == 1 && w_check == 0){
@@ -564,6 +564,7 @@ int main(int argc, char **argv)
 
     // if wildcard applies to the whole passage. 
     else if (l_check == 0 && w_check == 1){
+        
         int front_flag = 0, back_flag = 0;
         char* real_sname = (char*) malloc(strlen(sname) + 1);
         if(sname[0] == '*') {
@@ -635,6 +636,7 @@ int main(int argc, char **argv)
                     // strcat(rname, ' ');
                     strcat(string, rname);
                     strcat(string, temp + index + first_space);
+                    continue;
                 }
 
                 char* temp_str[10000];
@@ -740,6 +742,7 @@ int main(int argc, char **argv)
     
     // if wildcard applies to given -l range
     else if (l_check){
+        
         int front_flag = 0, back_flag = 0;
         char* real_sname = (char*) malloc(strlen(sname) + 1);
         if(sname[0] == '*') {
@@ -781,9 +784,10 @@ int main(int argc, char **argv)
             free(string);
         }
 
-
+        
         // replacement part. 
-        while(j <= (num[1])){
+        while(j < (num[1] + 1)){
+            printf("I am 787 \n");
             int bytes_read;
             size_t size = 200;
             char *string = (char*)malloc (200 * sizeof(char));
@@ -816,6 +820,7 @@ int main(int argc, char **argv)
                         first_space++;
                     }
                     start_match = 1;
+                    printf("GOES HERE");
                     strcpy(temp, string);
 
                     // Index of current found word
@@ -827,6 +832,7 @@ int main(int argc, char **argv)
                     // strcat(rname, ' ');
                     strcat(string, rname);
                     strcat(string, temp + index + first_space);
+                    continue;
                 }
 
                 char* temp_str[10000];
