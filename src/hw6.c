@@ -468,10 +468,10 @@ int main(int argc, char **argv)
             fputs(string, output);
             free(string);
         }
-        return 0;
+        
     }
 
-
+    
     // simple search with -l range. 
     else if (l_check == 1 && w_check == 0){
         int j = 0;
@@ -572,15 +572,13 @@ int main(int argc, char **argv)
             back_flag = 1;
             int substr_start = 0;
             int substr_end = strlen(sname) - 2;
-            
-            real_sname = (char*)malloc((substr_end - substr_start + 1));
+            // real_sname = (char*)malloc((substr_end - substr_start + 1));
             int i = 0;
-            sname[strlen(sname)-1] = '\0';
-            
-            real_sname = sname;
-            // printf("%s \n",real_sname);
+            for(i = 0; i < substr_end - substr_start + 1; i++){
+                real_sname[i] = sname[i + start];
+            }
+            real_sname[i] = '\0';
         }
-
         int j = 0;
         while (1)
         {
@@ -588,11 +586,10 @@ int main(int argc, char **argv)
             size_t size = 200;
             char *string;
 
-            string = NULL;
             string = (char *) malloc (size);
             bytes_read = getline (&string, &size, input_temp);
+            // bytes_read = getline (&string, &size, input_temp);
             // printf("563 %d\n", bytes_read);
-
             if (bytes_read == EOF){
                 free(string);
                 break;
@@ -604,162 +601,11 @@ int main(int argc, char **argv)
             // https://codeforwin.org/c-programming/c-program-find-and-replace-a-word-in-file
 
             char* pos, temp[10000];
-            char* temp_str = NULL;
+            
+            // int new_length = strlen(new_word);
+            
             int index = 0;
             printf("%d: ", j);
-            while ((pos = strstr(string+index, real_sname)) != NULL)
-            {
-                temp_str = (char*)malloc(strlen(real_sname)+1);
-                printf("%s \n",sname);
-                // Check if the word is valid to replace
-                strcpy(temp_str, real_sname);
-                printf("%s \n",sname);
-                int is_space_pos_one  = isspace(*(pos-1));
-
-                int is_punc_pos_one = ispunct(*(pos-1));
-                int front_flag_cond = (is_space_pos_one && is_punc_pos_one);
-                
-                if (front_flag && (is_space_pos_one && is_punc_pos_one))
-                {
-                    
-                    index = pos - string + 1; 
-                    free(temp_str);
-                    continue;
-                }
-
-                // int back_flag_cond = ((is_space_pos_one == 0) && (is_punc_pos_one == 0));
-                
-                if (back_flag && ((is_space_pos_one == 0) && (is_punc_pos_one == 0)))
-                {
-                    index = pos - string + strlen(real_sname);  
-                    free(temp_str);
-                    continue;
-                }
-                int begin = 0, end = 0;
-                
-                
-                if (front_flag)
-                {
-                    end = pos - string + strlen(real_sname) ;
-                    
-                    int fr_ptr = 0;
-                    while((isspace(*(pos+fr_ptr)) == 0 )&& (ispunct(*(pos+fr_ptr)) == 0)) 
-                    {
-                        fr_ptr--;
-                    }
-                    begin = fr_ptr + end - 1;
-                }
-
-                if (back_flag)
-                {
-                    begin = pos - string;
-                    int fr_ptr = 0;
-                    while((isspace(pos[fr_ptr]) == 0 )&& ispunct(pos[fr_ptr]) == 0) 
-                    {
-                        fr_ptr++;
-                        /* code */
-                    }
-                    end = fr_ptr + begin;
-                }
-
-                int old_length = end - begin;
-                // Backup current line
-                strcpy(temp, string);
-
-                // Index of current found word
-                index = begin;
-
-                // // Terminate str after word found index
-                string[index] = '\0';
-
-                // Concatenate str with new word 
-                strcat(string, rname);
-                
-                // Concatenate str with remaining words after 
-                // oldword found index.
-                strcat(string, temp + index + old_length);
-
-                index = end + 1;
-
-            // printf("214");
-            }
-            printf("\n");
-            fputs(string, output);
-            free(string);
-        }
-        free(real_sname);
-        
-    }
-    
-    // if wildcard applies to given -l range
-    else if (l_check && w_check){
-        int front_flag = 0, back_flag = 0;
-        char* real_sname = (char*) malloc(strlen(sname) + 1);
-        if(sname[0] == '*') {
-            front_flag = 1;
-            // real_sname = substring(sname, 1 , strlen(sname) - 1);
-            int substr_start = 1;
-            int substr_end = strlen(sname) - 1;
-            int i = 0;
-            for(i = 0; i < substr_end - substr_start + 1; i++){
-                real_sname[i] = sname[i + start];
-            }
-            real_sname[i] = '\0';
-        }
-        if(sname[strlen(sname)-1] == '*') {
-            back_flag = 1;
-            int substr_start = 0;
-            int substr_end = strlen(sname) - 2;
-            // real_sname = (char*)malloc((substr_end - substr_start + 1));
-            int i = 0;
-            for(i = 0; i < substr_end - substr_start + 1; i++){
-                real_sname[i] = sname[i + start];
-            }
-            real_sname[i] = '\0';
-        }
-        int j = 0;
-        // before replacement
-        while (j < num[0] - 1){
-            int bytes_read;
-            size_t size = 200;
-            char *string;
-            string = (char *) malloc (size);
-            bytes_read = getline (&string, &size, input_temp);   
-            if (bytes_read == EOF){
-                free(string);
-                break;
-            }     
-            j++;
-            fputs(string, output);
-            free(string);
-        }
-
-        int m = 0;
-        // replacement part. 
-        while(j <= (num[1])){
-            int bytes_read;
-            size_t size = 200;
-            char *string;
-
-            string = (char *) malloc (size);
-            bytes_read = getline (&string, &size, input_temp);
-            if (bytes_read == EOF){
-                free(string);
-                break;
-            }
-            m ++;
-            // printf(bytes_read);
-            //replace(string, sname, rname);
-
-            // The following codes is inspired by this website: 
-            // https://codeforwin.org/c-programming/c-program-find-and-replace-a-word-in-file
-
-            char* pos, temp[10000];
-
-
-            int old_length = strlen(sname);
-            // int new_length = strlen(new_word);
-            int index = 0;
             while ((pos = strstr(string+index, real_sname)) != NULL)
             {
                 // Check if the word is valid to replace
@@ -825,6 +671,74 @@ int main(int argc, char **argv)
                 strcat(string, temp + index + old_length);
 
                 index = end + 1;
+
+            // printf("214");
+            }
+            printf("\n");
+            fputs(string, output);
+            free(string);
+        }
+        free(real_sname);
+        
+    }
+    
+    // if wildcard applies to given -l range
+    else if (l_check){
+        int j = 0;
+        // before replacement
+        while (j < num[0] - 1){
+            int bytes_read;
+            size_t size = 200;
+            char *string;
+            string = (char *) malloc (size);
+            bytes_read = getline (&string, &size, input_temp);   
+            if (bytes_read == EOF){
+                free(string);
+                break;
+            }     
+            j++;
+            fputs(string, output);
+            free(string);
+        }
+
+
+        // replacement part. 
+        while(j <= (num[1])){
+            int bytes_read;
+            size_t size = 200;
+            char *string;
+
+            string = (char *) malloc (size);
+            bytes_read = getline (&string, &size, input_temp);
+            if (bytes_read == EOF){
+                free(string);
+                break;
+            }
+            j++;
+            // printf(bytes_read);
+            //replace(string, sname, rname);
+
+            // The following codes is inspired by this website: 
+            // https://codeforwin.org/c-programming/c-program-find-and-replace-a-word-in-file
+
+            char* pos, temp[10000];
+            int old_length = strlen(sname);
+            // int new_length = strlen(new_word);
+            int index = 0;
+
+            while ((pos = strstr(string, sname)) != NULL)
+            {
+                // Backup current line
+                strcpy(temp, string);
+                // Index of current found word
+                index = pos - string;
+                // // Terminate str after word found index
+                string[index] = '\0';
+                // Concatenate str with new word 
+                strcat(string, rname);
+                // Concatenate str with remaining words after 
+                // oldword found index.
+                strcat(string, temp + index + old_length);
             }
             fputs(string, output);
             free(string);
@@ -849,7 +763,6 @@ int main(int argc, char **argv)
             fputs(string, output);
             free(string);
         }
-        free(real_sname);
     }
     else{
 
