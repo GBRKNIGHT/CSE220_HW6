@@ -18,18 +18,22 @@ unsigned int is_wolf_invalid(char* wolf){
     if(char_zero == 0){
         for(int i = 1; i < length - 1; i++){
             if(wolf[i] == '*'){
+                
                 return -999; // not valid if * appears in the mid of string. 
             }
         }
     }
     else{ // if char0 is *, it is valid search no whether what.
+        printf("HERE???\n");
         printf("HEREHERE\n");
         if(wolf[strlen(wolf) - 1] == '*'){
             // if the last char is also '*', then it is an error. 
+            
             return -999;
         } 
         for(int i = 2; i < length - 1; i++){
             if(wolf[i] == '*'){
+                
                 return -999; // not valid if * appears in the mid of string. 
             }
         }
@@ -190,7 +194,6 @@ int main(int argc, char **argv)
 	while ((c = getopt(argc, argv, "s:r:wl:io")) != -1){
         // s: -s, r:-r, l:-l, i: input file, o:output file
         //printf("111");
-
 		switch (c) {
 			case 's':
             {
@@ -213,7 +216,9 @@ int main(int argc, char **argv)
 
             case 'w':{
                 w_check ++;
-                valid_wolf = is_wolf_invalid(sname);
+                if(s_check){
+                    valid_wolf = is_wolf_invalid(sname);
+                }
                 w_flag = 1;
                 break;
             }
@@ -366,35 +371,35 @@ int main(int argc, char **argv)
 		printf("no arguments left to process\n");
 	}
     if(missing_argument){
-        // printf("HEREHERE\n");
+        printf("MISSING_ARGUMENT\n");
         return MISSING_ARGUMENT;
     }
     if(duplicate_argument){
-        // printf("HEREHERE\n");
+        printf("DUPLICATE_ARGUMENT 8\n");
         return DUPLICATE_ARGUMENT;
     }
     if(input_file_missing){
-        printf("HEREHERE 2\n");
+        printf("INPUT_FILE_MISSING 2\n");
         return INPUT_FILE_MISSING;
     }
     if(output_file_unwritable){
-        printf("HEREHERE 3\n");
+        printf("OUTPUT_FILE_UNWRITABLE 3\n");
         return OUTPUT_FILE_UNWRITABLE;
     }
     if(s_argument_missing){
-        printf("HEREHERE 4\n");
+        printf("S_ARGUMENT_MISSING 4\n");
         return S_ARGUMENT_MISSING;
     }
     if(r_argument_missing){
-        printf("HEREHERE 5\n");
+        printf("R_ARGUMENT_MISSING 5\n");
         return R_ARGUMENT_MISSING;
     }
     if(l_arguments_invalid){
-        printf("HEREHERE 6\n");
+        printf("L_ARGUMENT_INVALID 6\n");
         return L_ARGUMENT_INVALID;
     }
     if(wildcard_invalid){
-        printf("HEREHERE 7\n");
+        printf("WILDCARD_INVALID 7\n");
         return WILDCARD_INVALID;
     }
 
