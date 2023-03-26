@@ -174,8 +174,8 @@ int main(int argc, char **argv)
     int c;
 
 	int s_flag=0, l_flag = 0, r_flag=0, w_flag=0, debug = 0;
-	char *sname = "default_sname";
-    char *rname = "default_rname";
+	char *sname = "default_ssssssname";
+    char *rname = "default_rrrrrrname";
     char *lname = "default_lname";
 	static char usage[] = "usage: %s [-srl] [-s]sname [-r] rname [-l] lname [-w] lname [input_file] [output_file]\n";
     int s_check = 0;
@@ -205,7 +205,9 @@ int main(int argc, char **argv)
                 //rname
                 r_check ++;
                 r_flag = 1;
+                printf("line 209 rsize %d\n", strlen(rname));
                 rname = optarg;
+                printf("line 201 rsize %d\n", strlen(rname));
 				break;
             }	
 
@@ -399,7 +401,7 @@ int main(int argc, char **argv)
 
 
     // part2 codes.
-    
+    printf("I am 404 \n");
     // char *search_text = sname;
     // char *replacement_text = rname;
     FILE* input = fopen(input_file, "r");// read only
@@ -562,21 +564,27 @@ int main(int argc, char **argv)
 
     // if wildcard applies to the whole passage. 
     else if (l_check == 0 && w_check == 1){
-        
+        printf("I am 567 \n");
         int front_flag = 0, back_flag = 0;
         char* real_sname = (char*) malloc(strlen(sname) + 1);
         if(sname[0] == '*') {
             front_flag = 1;
-            real_sname = substring(sname, 1 , strlen(sname) - 1);
+            int substr_start = 1;
+            int substr_end = strlen(sname) - 1;
+            int i = 0;
+            for(; i < substr_end - substr_start + 1; i++){
+                real_sname[i] = sname[i + start];
+            }
+            real_sname [i] = '\0';
         }
         if(sname[strlen(sname)-1] == '*') {
-            
+            // rname = strcat(rname, " ");
             back_flag = 1;
             int substr_start = 0;
             int substr_end = strlen(sname) - 2;
             // real_sname = (char*)malloc((substr_end - substr_start + 1));
             int i = 0;
-            for(i = 0; i < substr_end - substr_start + 1; i++){
+            for(; i < substr_end - substr_start + 1; i++){
                 real_sname[i] = sname[i + start];
             }
             real_sname[i] = '\0';
@@ -585,12 +593,10 @@ int main(int argc, char **argv)
         int j = 0;
         while (1)
         {
+            printf("I am 590 \n");
             int bytes_read;
             size_t size = 200;
-            char *string;
-
-            
-            string = (char *) malloc (size);
+            char *string = malloc (200 * sizeof(char));
             bytes_read = getline (&string, &size, input_temp);
             // bytes_read = getline (&string, &size, input_temp);
             // printf("563 %d\n", bytes_read);
@@ -613,12 +619,14 @@ int main(int argc, char **argv)
                 // Check if the word is valid to replace
                 printf("%ld ", pos-string);
                 char* temp_str[10000];
+                if(pos == string || pos == NULL){
+                    break;
+                }
+                int is_space_pos_one  = isspace(*(pos-1));
+                int is_punc_pos_one = ispunct(*(pos-1));
                 
-                int is_space_pos_one  = isspace((char)(pos-1));
-                int is_punc_pos_one = ispunct((char)(pos-1));
                 
-                
-                if (front_flag && (is_space_pos_one && is_punc_pos_one))
+                if (front_flag && ((is_space_pos_one) && (is_punc_pos_one)))
                 {
                     
                     index = pos - string + 1; 
@@ -638,7 +646,8 @@ int main(int argc, char **argv)
                 {
                     end = pos + strlen(real_sname) - string;
                     int fr_ptr = 0;
-                    while((isspace((char)(pos+fr_ptr)) == 0 ) && (ispunct((char)(pos+fr_ptr)) == 0)) 
+                    while((isspace(pos[fr_ptr]) == 0) && isspace(pos[fr_ptr - 1]))
+                    // while((isspace(*(pos+fr_ptr)) == 0 ) && (ispunct(*(pos+fr_ptr)) == 0)) 
                     {
                         fr_ptr--;
                         /* code */
@@ -648,15 +657,14 @@ int main(int argc, char **argv)
 
                 if (back_flag)
                 {
-                    
                     begin = pos - string;
                     int bk_ptr = 0;
                     
-                    while((isspace((char)pos+ bk_ptr) == 0 )&& ispunct((char)pos + bk_ptr) == 0) 
+                    while((isspace(pos[bk_ptr + 1]) == 0) && (isspace(pos[bk_ptr]) == 0)) 
                     {
                         
+                        printf("%c \n", *(pos+bk_ptr));
                         bk_ptr++;
-                        /* code */
                     }
                     end = bk_ptr + begin;
                 }
@@ -674,7 +682,9 @@ int main(int argc, char **argv)
                 string[index] = '\0';
 
                 // Concatenate str with new word 
+                // strcat(rname, ' ');
                 strcat(string, rname);
+
                 
                 // Concatenate str with remaining words after 
                 // oldword found index.
@@ -694,6 +704,7 @@ int main(int argc, char **argv)
     
     // if wildcard applies to given -l range
     else if (l_check){
+        
         int j = 0;
         // before replacement
         while (j < num[0] - 1){
@@ -775,7 +786,7 @@ int main(int argc, char **argv)
         }
     }
     else{
-
+        
     }
 
     //after replacement. 
