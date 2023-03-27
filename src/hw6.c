@@ -621,7 +621,7 @@ int main(int argc, char **argv)
                 // Check if the word is valid to replace
                 printf("%ld ", pos-string);
                 int start_match = 0;
-                if(pos - string == 0){
+                if((pos - string == 0) && back_flag){
 
                     
                     int first_space = 0;
@@ -653,39 +653,36 @@ int main(int argc, char **argv)
                 int is_punc_pos_one = ispunct(*(pos-1));
                 
                
-
-                if (front_flag && ((is_space_pos_one) && (is_punc_pos_one)))
-                {
-                    printf(" string %s \n", string);
-                    index = pos - string + 1; 
-                    continue;
-                }
+                
 
                 
-                // if this is back* and previous is not space or punctuation
-                if (back_flag && ((is_space_pos_one == 0) && (is_punc_pos_one == 0) ) )
-                {
-                    
-                    index = pos + strlen(real_sname) - string ;
-                    continue;
-                }
+                
                 int begin = 0, end = 0;
             
                 
                 if (front_flag)
                 {
+                    // if this is front* and previous is space or punctuation (space or punct)
+                    // and the char next to the string is not a space and not punct
+                    if (((is_space_pos_one) || (is_punc_pos_one)) || ((isspace(*(pos+strlen(real_sname))) == 0) && (ispunct(*(pos+strlen(real_sname))) == 0)))
+                    {
+                        printf(" string %s \n", string);
+                        index = pos - string + 1; 
+                        continue;
+                    }
                     end = pos + strlen(real_sname) - string;
                     int fr_ptr = 0;
                     int entered_here = 0;
-                    printf("!%c ! ", pos[fr_ptr + 2]);
-                    while(((isspace(pos[fr_ptr + 2]) != 0)&& (pos[fr_ptr+ 2]) != '\n' ))
+                    printf("!%c !", *(pos+fr_ptr));
+                    while(((pos+fr_ptr-1) >= string) && (((ispunct(*(pos+fr_ptr-1)) == 0)) && (isspace(*(pos+fr_ptr-1)) == 0)))
                     // while((isspace(*(pos+fr_ptr)) == 0 ) && (ispunct(*(pos+fr_ptr)) == 0)) 
                     {
                         entered_here = 1;
                         fr_ptr--;
                         /* code */
                     }
-                    begin = fr_ptr + end - 1;
+                    printf("%d", fr_ptr);
+                    begin = fr_ptr + end - strlen(real_sname);
                     int old_length = end - begin;
                     
                     // Backup current line
@@ -712,6 +709,13 @@ int main(int argc, char **argv)
                 int entered_here = 0;
                 if (back_flag)
                 {
+                    // if this is back* and previous is not space or punctuation !(space or punct) => (!space) and (!punct)
+                    if ((is_space_pos_one == 0) && (is_punc_pos_one == 0))
+                    {
+                        
+                        index = pos + strlen(real_sname) - string ;
+                        continue;
+                    }
                     begin = pos - string;
                     int bk_ptr = 0;
                     while(((isspace(pos[bk_ptr + 1]) == 0)|| (pos[bk_ptr + 1]) == '\n')
