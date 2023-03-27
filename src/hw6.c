@@ -861,7 +861,8 @@ int main(int argc, char **argv)
                 if((pos - string == 0)&& back_flag){
                     int first_space = 0;
                     int loop_counter = 0;
-                    while(isspace(string[first_space])){
+                    while(isspace(string[first_space]) == 0)
+                    {
                         loop_counter ++;
                         if(loop_counter > strlen(string)) break;
                         first_space++;
@@ -948,11 +949,11 @@ int main(int argc, char **argv)
                     }
                     begin = pos - string;
                     int bk_ptr = 0;
-                    // if(start_match){
-                    //     bk_ptr = 1;
-                    //     start_match = 0;
-                    //     continue;
-                    // }
+                    if(start_match){
+                        bk_ptr = 1;
+                        start_match = 0;
+                        continue;
+                    }
                     while(((isspace(pos[bk_ptr + 1]) == 0)|| (pos[bk_ptr + 1]) == '\n')
                         && ((isspace(pos[bk_ptr]) == 0)||( (pos[bk_ptr]) == '\n')) )
                     {
