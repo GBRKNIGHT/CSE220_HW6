@@ -598,8 +598,6 @@ int main(int argc, char **argv)
             size_t size = 200;
             char *string = (char*)malloc (200);
             bytes_read = getline (&string, &size, input_temp);
-            // bytes_read = getline (&string, &size, input_temp);
-            // printf("563 %d\n", bytes_read);
             if (bytes_read == EOF){
                 free(string);
                 break;
@@ -610,7 +608,6 @@ int main(int argc, char **argv)
 
             char* pos, temp[10000];
             
-           
             
             int index = 0;
             printf("%d: ", j);
@@ -623,7 +620,6 @@ int main(int argc, char **argv)
                 int start_match = 0;
                 if((pos - string == 0) && back_flag){
 
-                    
                     int first_space = 0;
                     int loop_counter = 0;
                     while(isspace(string[first_space]) == 0){
@@ -679,7 +675,6 @@ int main(int argc, char **argv)
                     {
                         entered_here = 1;
                         fr_ptr--;
-                        /* code */
                     }
                     printf("%d", fr_ptr);
                     begin = fr_ptr + end - strlen(real_sname);
@@ -793,18 +788,17 @@ int main(int argc, char **argv)
     
     // if wildcard applies to given -l range
     else if (l_check){
-        
         int front_flag = 0, back_flag = 0;
         char* real_sname = (char*) malloc(strlen(sname) + 1);
         if(sname[0] == '*') {
             front_flag = 1;
             int substr_start = 1;
             int substr_end = strlen(sname) - 1;
-            int i = 0;
-            for(; i < substr_end - substr_start + 1; i++){
-                real_sname[i] = sname[i + start];
+            int i = 1;
+            for(; i < substr_end - substr_start + 2; i++){
+                real_sname[i - 1] = sname[i + start];
             }
-            real_sname [i] = '\0';
+            real_sname [i - 1] = '\0';
         }
         if(sname[strlen(sname)-1] == '*') {
             // rname = strcat(rname, " ");
@@ -838,13 +832,10 @@ int main(int argc, char **argv)
         
         // replacement part. 
         while(j < (num[1] + 1)){
-            printf("I am 787 \n");
             int bytes_read;
             size_t size = 200;
-            char *string = (char*)malloc (200 * sizeof(char));
+            char *string = (char*)malloc (200);
             bytes_read = getline (&string, &size, input_temp);
-            // bytes_read = getline (&string, &size, input_temp);
-            // printf("563 %d\n", bytes_read);
             if (bytes_read == EOF){
                 free(string);
                 break;
@@ -855,7 +846,6 @@ int main(int argc, char **argv)
 
             char* pos, temp[10000];
             
-           
             
             int index = 0;
             printf("%d: ", j);
@@ -865,10 +855,10 @@ int main(int argc, char **argv)
                 // Check if the word is valid to replace
                 printf("%ld ", pos-string);
                 int start_match = 0;
-                if(pos - string == 0){
+                if((pos - string == 0)&& back_flag){
                     int first_space = 0;
                     int loop_counter = 0;
-                    while(string[first_space] != ' '){
+                    while(isspace(string[first_space])){
                         loop_counter ++;
                         if(loop_counter > strlen(string)) break;
                         first_space++;
@@ -882,7 +872,6 @@ int main(int argc, char **argv)
                     // // Terminate str after word found index
                     string[index] = '\0';
                     // Concatenate str with new word 
-                    // strcat(rname, ' ');
                     strcat(string, rname);
                     strcat(string, temp + index + first_space);
                     continue;
@@ -897,40 +886,61 @@ int main(int argc, char **argv)
                 
                
 
-                if (front_flag && ((is_space_pos_one) && (is_punc_pos_one)))
-                {
-                    
-                    index = pos - string + 1; 
-                    continue;
-                }
+
 
                 
                 // if this is back* and previous is not space or punctuation
-                if (back_flag && ((is_space_pos_one == 0) && (is_punc_pos_one == 0) ) )
-                {
-                    
-                    index = pos + strlen(real_sname) - string ;
-                    continue;
-                }
                 int begin = 0, end = 0;
             
 
                 if (front_flag)
                 {
-                    
+                    if (((is_space_pos_one) || (is_punc_pos_one)) || ((isspace(*(pos+strlen(real_sname))) == 0) && (ispunct(*(pos+strlen(real_sname))) == 0)))
+                    {
+                        printf(" string %s \n", string);
+                        index = pos - string + 1; 
+                        continue;
+                    }
                     end = pos + strlen(real_sname) - string;
                     int fr_ptr = 0;
-                    while((isspace(pos[fr_ptr]) == 0) && isspace(pos[fr_ptr - 1]))
+                    int entered_here = 0;
+                    while(((pos+fr_ptr-1) >= string) && (((ispunct(*(pos+fr_ptr-1)) == 0)) && (isspace(*(pos+fr_ptr-1)) == 0)))
                     // while((isspace(*(pos+fr_ptr)) == 0 ) && (ispunct(*(pos+fr_ptr)) == 0)) 
                     {
+                        entered_here = 1;
                         fr_ptr--;
-                        /* code */
                     }
-                    begin = fr_ptr + end - 1;
+                    begin = fr_ptr + end - strlen(real_sname);
+                    int old_length = end - begin;
+                    // Backup current line
+                    strcpy(temp, string);
+
+                    // Index of current found word
+                    index = begin;
+
+                    // // Terminate str after word found index
+                    string[index] = '\0';
+
+                    // Concatenate str with new word 
+                    strcat(string, rname);
+                    
+                    // Concatenate str with remaining words after 
+                    // oldword found index.
+                    strcat(string, temp + index + old_length);
+
+                    index = end + 1;
                 }
 
+                char save_char_MANCHESTER[2];
+                int entered_here = 0;
                 if (back_flag)
                 {
+                    if ((is_space_pos_one == 0) && (is_punc_pos_one == 0))
+                    {
+                        
+                        index = pos + strlen(real_sname) - string ;
+                        continue;
+                    }
                     begin = pos - string;
                     int bk_ptr = 0;
                     // if(start_match){
@@ -938,47 +948,62 @@ int main(int argc, char **argv)
                     //     start_match = 0;
                     //     continue;
                     // }
-                    while((isspace(pos[bk_ptr + 1]) == 0) && (isspace(pos[bk_ptr]) == 0)) 
+                    while(((isspace(pos[bk_ptr + 1]) == 0)|| (pos[bk_ptr + 1]) == '\n')
+                        && ((isspace(pos[bk_ptr]) == 0)||( (pos[bk_ptr]) == '\n')) )
                     {
-                        printf("%c ", *(pos+bk_ptr));
+                        entered_here = 1;
+                        printf("%c ", *(pos+bk_ptr + 1));
+                        if(ispunct(*(pos+bk_ptr + 1))){
+                            // char save_char[2];
+                            save_char_MANCHESTER[0] = *(pos+bk_ptr + 1);
+                            save_char_MANCHESTER[1] = '\0';
+                            printf("%s \n", save_char_MANCHESTER);
+                            strcat(rname, save_char_MANCHESTER);
+                        }
                         bk_ptr++;
                     }
                     end = bk_ptr + begin;
+                    int old_length = end - begin + 1;
+                    // Backup current line
+                    strcpy(temp, string);
+
+                    // Index of current found word
+                    index = pos - string;
+
+                    // // Terminate str after word found index
+                    string[index] = '\0';
+
+                    // Concatenate str with new word 
+                    // strcat(rname, ' ');
+                    strcat(string, rname);
+                    
+                    // delete once if previous added punctuation
+                    if(ispunct(rname[strlen(rname) - 1])){
+                        printf("THIS IS RNAME %s \n", rname);
+                        rname[strlen(rname) - 1] = '\0';
+                    }
+                    int end_with_punct = 0;
+                    
+                    // find if this word is end with punctuation
+                    int enter_here = 0;
+                    printf("%c YGUJHKTY\n", string[old_length - 1 + index]);
+                    
+                    if(ispunct(string[old_length - 1 + index])){
+                        enter_here = 1;
+                        printf("this is %d \n" , old_length + 1);
+                        end_with_punct = 1;
+                        char save_char[2];
+                        save_char[0] = string[old_length - 1 + index];
+                        save_char[1] = '\0';
+                        printf("%s \n", save_char);
+                    }
+                    
+                    // Concatenate str with remaining words after 
+                    // oldword found index.
+                    strcat(string, temp + index + old_length);
+
+                    index = end + 1;
                 }
-
-                int old_length = end - begin + 1;
-
-                // Backup current line
-                strcpy(temp, string);
-
-                // Index of current found word
-                index = pos - string;
-
-                // // Terminate str after word found index
-                string[index] = '\0';
-
-                // Concatenate str with new word 
-                // strcat(rname, ' ');
-                strcat(string, rname);
-                // printf(" punct = %c \n",string[old_length + index - 1]);
-                int end_with_punct = 0;
-                
-                // find if this word is end with punctuation
-                if(ispunct(string[old_length - 1 + index])){
-                    printf("this is %d \n" , old_length + 1);
-                    end_with_punct = 1;
-                    char save_char[2];
-                    save_char[0] = string[old_length - 1 + index];
-                    save_char[1] = '\0';
-                    strcat(string, save_char);
-                }
-
-                
-                // Concatenate str with remaining words after 
-                // oldword found index.
-                strcat(string, temp + index + old_length);
-
-                index = end + 1;
 
             // printf("214");
             }
@@ -986,6 +1011,7 @@ int main(int argc, char **argv)
             fputs(string, output);
             free(string);
         }
+        free(real_sname);
         
         // after replacement
         while (1){
