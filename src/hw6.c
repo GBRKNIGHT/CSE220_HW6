@@ -669,18 +669,20 @@ int main(int argc, char **argv)
             
                 char save_char_MANCHESTER[2];
                 int entered_here = 0;
-
+                printf("%s \n", string);
                 if (front_flag)
                 {
-                    // printf("%s \n", string);
+                    // printf("!%c !", *(pos+fr_ptr));
+                    
                     // printf("%d \n", (string[strlen(string)]));
                     // if this is front* and previous is space or punctuation (space or punct)
                     // and the char next to the string is not a space and not punct
-                    if (((is_space_pos_one) || (is_punc_pos_one)) || (is_line_change_pos_one)|| (is_EOF_pos_one)
+                    if (((is_space_pos_one) || (is_line_change_pos_one)|| (is_EOF_pos_one))
                         ||(((isspace(*(pos+strlen(real_sname))) == 0) && (ispunct(*(pos+strlen(real_sname))) == 0)) 
                             && (((*(pos+strlen(real_sname)))!='\n')&& ((*(pos+strlen(real_sname)))!= NULL))) )
                     {
                         // printf("I AM HERE \n");
+                        printf("%s \n", string);
                         // printf(" string %s \n", string);
                         index = pos - string + 1; 
                         continue;
@@ -688,11 +690,11 @@ int main(int argc, char **argv)
                     end = pos + strlen(real_sname) - string;
                     int fr_ptr = 0;
                     int entered_here = 0;
-                    // printf("!%c !", *(pos+fr_ptr));
+                    
                     while(((pos+fr_ptr-1) >= string) && (((ispunct(*(pos+fr_ptr-1)) == 0)) && (isspace(*(pos+fr_ptr-1)) == 0)))
                     // while((isspace(*(pos+fr_ptr)) == 0 ) && (ispunct(*(pos+fr_ptr)) == 0)) 
                     {
-
+                        printf("%s \n", real_sname);
                         entered_here = 1;
                         if(ispunct(*(pos+fr_ptr))){
                             // char save_char[2];
@@ -922,7 +924,7 @@ int main(int argc, char **argv)
 
                 if (front_flag)
                 {
-                    if (((is_space_pos_one) || (is_punc_pos_one)) 
+                    if (((is_space_pos_one)) 
                         ||(((isspace(*(pos+strlen(real_sname))) == 0) && (ispunct(*(pos+strlen(real_sname))) == 0)) 
                             && (((*(pos+strlen(real_sname)))!='\n')&& ((*(pos+strlen(real_sname)))!= NULL))) )
                     {
@@ -930,6 +932,7 @@ int main(int argc, char **argv)
                         index = pos - string + 1; 
                         continue;
                     }
+                    
                     end = pos + strlen(real_sname) - string;
                     int fr_ptr = 0;
                     int entered_here = 0;
@@ -939,6 +942,7 @@ int main(int argc, char **argv)
                         entered_here = 1;
                         fr_ptr--;
                     }
+                    
                     begin = fr_ptr + end - strlen(real_sname);
                     int old_length = end - begin;
                     // Backup current line
@@ -1078,28 +1082,3 @@ int main(int argc, char **argv)
 
 
 
-
-
-//
-//                       _oo0oo_
-//                      o8888888o
-//                      88" . "88
-//                      (| -_- |)
-//                      0\  =  /0
-//                    ___/`---'\___
-//                  .' \\|     |// '.
-//                 / \\|||  :  |||// \
-//                / _||||| -:- |||||- \
-//               |   | \\\  -  /// |   |
-//               | \_|  ''\---/''  |_/ |
-//               \  .-\__  '-'  ___/-. /
-//             ___'. .'  /--.--\  `. .'___
-//          ."" '<  `.___\_<|>_/___.' >' "".
-//         | | :  `- \`.;`\ _ /`;.`/ - ` : | |
-//         \  \ `_.   \_ __\ /__ _/   .-` /  /
-//     =====`-.____`.___ \_____/___.-`___.-'=====
-//                       `=---='
-//
-//
-//     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//            Buddha shines, no bugs finds!
