@@ -14,3 +14,5 @@ bin/hw6 -s *re -w -r New\ York tests.in/wildcard_search13.in.txt tests.out/STUPI
 text for wildcard_search13
 bin/hw6 -w -s *ork -r This\ homework\ is\ effortless. tests.in/wildcard_search19.in.txt tests.out/STUPID.txt
 text for wildcard_search19   replace over and over again. 
+bin/hw6 -s *So -r \ Therefore, -w tests.in/wildcard_search21.in.txt tests.out/STUPID.txt
+text for wildcard_search21 

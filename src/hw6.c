@@ -1,3 +1,18 @@
+
+
+
+
+/**
+ * Name: Yichen Li
+ * SBU_ID: 112946979
+ * CSE_220_R01
+ * 
+*/
+
+
+
+
+
 #include "hw6.h"
 
 
@@ -332,14 +347,14 @@ int main(int argc, char **argv)
     // free(divide_line);
     // detect for 's
     if (s_flag == 0){
-        fprintf(stderr, "%s: missing -s option\n", argv[0]);
-		fprintf(stderr, usage, argv[0]);
+        // fprintf(stderr, "%s: missing -s option\n", argv[0]);
+		// fprintf(stderr, usage, argv[0]);
 		s_argument_missing = 1;
     }
 	//detect for -r
     else if (r_flag == 0){ // check -r
-        fprintf(stderr, "%s: missing -r option\n", argv[0]);
-		fprintf(stderr, usage, argv[1]);
+        // fprintf(stderr, "%s: missing -r option\n", argv[0]);
+		// fprintf(stderr, usage, argv[1]);
 		r_argument_missing = 1;
     }
     //detect for -l
@@ -360,7 +375,7 @@ int main(int argc, char **argv)
 	
 	if (optind < argc)	{
         for (; optind < argc; optind++){
-            printf("argument: \"%s\"\n", argv[optind]);
+            // printf("argument: \"%s\"\n", argv[optind]);
         }
     }	
 	else {
@@ -402,8 +417,6 @@ int main(int argc, char **argv)
 
 
     // part2 codes.
-    printf("I am 404 \n");
-    
     // char *search_text = sname;
     // char *replacement_text = rname;
     FILE* input = fopen(input_file, "r");// read only
@@ -431,7 +444,7 @@ int main(int argc, char **argv)
             string = (char *) malloc (size);
             bytes_read = getline (&string, &size, input_temp);
             // bytes_read = getline (&string, &size, input_temp);
-            printf("563 %d\n", bytes_read);
+            // printf("563 %d\n", bytes_read);
             if (bytes_read == EOF){
                 free(string);
                 break;
@@ -493,7 +506,7 @@ int main(int argc, char **argv)
             free(string);
         }
         while(j <= (num[1])){
-            printf(" STUPID %d\n", (int)(num[1] - num[0]+1));
+            // printf(" STUPID %d\n", (int)(num[1] - num[0]+1));
             // replace(input_temp, sname, rname);
             // fputs(input_temp, output);
             int bytes_read;
@@ -610,13 +623,13 @@ int main(int argc, char **argv)
             
             
             int index = 0;
-            printf("%d: ", j);
+            // printf("%d: ", j);
             // printf(" real sname? %s \n", real_sname);
             while ((pos = strstr(string+index, real_sname)) != NULL)
             {
                 
                 // Check if the word is valid to replace
-                printf("%ld ", pos-string);
+                // printf("%ld ", pos-string);
                 int start_match = 0;
                 if((pos - string == 0) && back_flag){
                     int first_space = 0;
@@ -654,32 +667,43 @@ int main(int argc, char **argv)
                 
                 int begin = 0, end = 0;
             
-                
+                char save_char_MANCHESTER[2];
+                int entered_here = 0;
+
                 if (front_flag)
                 {
-                    printf("%s \n", string);
-                    printf("%d \n", (string[strlen(string)]));
+                    // printf("%s \n", string);
+                    // printf("%d \n", (string[strlen(string)]));
                     // if this is front* and previous is space or punctuation (space or punct)
                     // and the char next to the string is not a space and not punct
                     if (((is_space_pos_one) || (is_punc_pos_one)) || (is_line_change_pos_one)|| (is_EOF_pos_one)
                         ||(((isspace(*(pos+strlen(real_sname))) == 0) && (ispunct(*(pos+strlen(real_sname))) == 0)) 
                             && (((*(pos+strlen(real_sname)))!='\n')&& ((*(pos+strlen(real_sname)))!= NULL))) )
                     {
-                        printf(" string %s \n", string);
+                        // printf("I AM HERE \n");
+                        // printf(" string %s \n", string);
                         index = pos - string + 1; 
                         continue;
                     }
                     end = pos + strlen(real_sname) - string;
                     int fr_ptr = 0;
                     int entered_here = 0;
-                    printf("!%c !", *(pos+fr_ptr));
+                    // printf("!%c !", *(pos+fr_ptr));
                     while(((pos+fr_ptr-1) >= string) && (((ispunct(*(pos+fr_ptr-1)) == 0)) && (isspace(*(pos+fr_ptr-1)) == 0)))
                     // while((isspace(*(pos+fr_ptr)) == 0 ) && (ispunct(*(pos+fr_ptr)) == 0)) 
                     {
+
                         entered_here = 1;
+                        if(ispunct(*(pos+fr_ptr))){
+                            // char save_char[2];
+                            save_char_MANCHESTER[0] = *(pos+fr_ptr);
+                            save_char_MANCHESTER[1] = '\0';
+                            // printf("%s \n", save_char_MANCHESTER);
+                            strcat(rname, save_char_MANCHESTER);
+                        }
                         fr_ptr--;
                     }
-                    printf("%d", fr_ptr);
+                    // printf("%d", fr_ptr);
                     begin = fr_ptr + end - strlen(real_sname);
                     int old_length = end - begin;
                     
@@ -703,8 +727,7 @@ int main(int argc, char **argv)
                 }
 
 
-                char save_char_MANCHESTER[2];
-                int entered_here = 0;
+                
                 if (back_flag)
                 {
                     // if this is back* and previous is not space or punctuation !(space or punct) => (!space) and (!punct)
@@ -720,12 +743,12 @@ int main(int argc, char **argv)
                         && ((isspace(pos[bk_ptr]) == 0)||( (pos[bk_ptr]) == '\n')) )
                     {
                         entered_here = 1;
-                        printf("%c ", *(pos+bk_ptr + 1));
+                        // printf("%c ", *(pos+bk_ptr + 1));
                         if(ispunct(*(pos+bk_ptr + 1))){
                             // char save_char[2];
                             save_char_MANCHESTER[0] = *(pos+bk_ptr + 1);
                             save_char_MANCHESTER[1] = '\0';
-                            printf("%s \n", save_char_MANCHESTER);
+                            // printf("%s \n", save_char_MANCHESTER);
                             strcat(rname, save_char_MANCHESTER);
                         }
                         bk_ptr++;
@@ -748,7 +771,7 @@ int main(int argc, char **argv)
                     
                     // delete once if previous added punctuation
                     if(ispunct(rname[strlen(rname) - 1])){
-                        printf("THIS IS RNAME %s \n", rname);
+                        // printf("THIS IS RNAME %s \n", rname);
                         rname[strlen(rname) - 1] = '\0';
                     }
                     
@@ -758,16 +781,16 @@ int main(int argc, char **argv)
                     
                     // find if this word is end with punctuation
                     int enter_here = 0;
-                    printf("%c YGUJHKTY\n", string[old_length - 1 + index]);
+                    // printf("%c YGUJHKTY\n", string[old_length - 1 + index]);
                     
                     if(ispunct(string[old_length - 1 + index])){
                         enter_here = 1;
-                        printf("this is %d \n" , old_length + 1);
+                        // printf("this is %d \n" , old_length + 1);
                         end_with_punct = 1;
                         char save_char[2];
                         save_char[0] = string[old_length - 1 + index];
                         save_char[1] = '\0';
-                        printf("%s \n", save_char);
+                        // printf("%s \n", save_char);
                     }
                     
                     // Concatenate str with remaining words after 
@@ -781,7 +804,7 @@ int main(int argc, char **argv)
                 
             // printf("214");
             }
-            printf("\n");
+            // printf("\n");
             fputs(string, output);
             free(string);
         }
@@ -851,12 +874,12 @@ int main(int argc, char **argv)
             
             
             int index = 0;
-            printf("%d: ", j);
+            // printf("%d: ", j);
             
             while ((pos = strstr(string+index, real_sname)) != NULL)
             {
                 // Check if the word is valid to replace
-                printf("%ld ", pos-string);
+                // printf("%ld ", pos-string);
                 int start_match = 0;
                 if((pos - string == 0)&& back_flag){
                     int first_space = 0;
@@ -903,7 +926,7 @@ int main(int argc, char **argv)
                         ||(((isspace(*(pos+strlen(real_sname))) == 0) && (ispunct(*(pos+strlen(real_sname))) == 0)) 
                             && (((*(pos+strlen(real_sname)))!='\n')&& ((*(pos+strlen(real_sname)))!= NULL))) )
                     {
-                        printf(" string %s \n", string);
+                        // printf(" string %s \n", string);
                         index = pos - string + 1; 
                         continue;
                     }
@@ -958,12 +981,12 @@ int main(int argc, char **argv)
                         && ((isspace(pos[bk_ptr]) == 0)||( (pos[bk_ptr]) == '\n')) )
                     {
                         entered_here = 1;
-                        printf("%c ", *(pos+bk_ptr + 1));
+                        // printf("%c ", *(pos+bk_ptr + 1));
                         if(ispunct(*(pos+bk_ptr + 1))){
                             // char save_char[2];
                             save_char_MANCHESTER[0] = *(pos+bk_ptr + 1);
                             save_char_MANCHESTER[1] = '\0';
-                            printf("%s \n", save_char_MANCHESTER);
+                            // printf("%s \n", save_char_MANCHESTER);
                             strcat(rname, save_char_MANCHESTER);
                         }
                         bk_ptr++;
@@ -985,23 +1008,23 @@ int main(int argc, char **argv)
                     
                     // delete once if previous added punctuation
                     if(ispunct(rname[strlen(rname) - 1])){
-                        printf("THIS IS RNAME %s \n", rname);
+                        // printf("THIS IS RNAME %s \n", rname);
                         rname[strlen(rname) - 1] = '\0';
                     }
                     int end_with_punct = 0;
                     
                     // find if this word is end with punctuation
                     int enter_here = 0;
-                    printf("%c YGUJHKTY\n", string[old_length - 1 + index]);
+                    // printf("%c YGUJHKTY\n", string[old_length - 1 + index]);
                     
                     if(ispunct(string[old_length - 1 + index])){
                         enter_here = 1;
-                        printf("this is %d \n" , old_length + 1);
+                        // printf("this is %d \n" , old_length + 1);
                         end_with_punct = 1;
                         char save_char[2];
                         save_char[0] = string[old_length - 1 + index];
                         save_char[1] = '\0';
-                        printf("%s \n", save_char);
+                        // printf("%s \n", save_char);
                     }
                     
                     // Concatenate str with remaining words after 
@@ -1013,7 +1036,7 @@ int main(int argc, char **argv)
 
             // printf("214");
             }
-            printf("\n");
+            // printf("\n");
             fputs(string, output);
             free(string);
         }
@@ -1052,3 +1075,31 @@ int main(int argc, char **argv)
     
 	exit(0);
 }
+
+
+
+
+
+//
+//                       _oo0oo_
+//                      o8888888o
+//                      88" . "88
+//                      (| -_- |)
+//                      0\  =  /0
+//                    ___/`---'\___
+//                  .' \\|     |// '.
+//                 / \\|||  :  |||// \
+//                / _||||| -:- |||||- \
+//               |   | \\\  -  /// |   |
+//               | \_|  ''\---/''  |_/ |
+//               \  .-\__  '-'  ___/-. /
+//             ___'. .'  /--.--\  `. .'___
+//          ."" '<  `.___\_<|>_/___.' >' "".
+//         | | :  `- \`.;`\ _ /`;.`/ - ` : | |
+//         \  \ `_.   \_ __\ /__ _/   .-` /  /
+//     =====`-.____`.___ \_____/___.-`___.-'=====
+//                       `=---='
+//
+//
+//     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//            Buddha shines, no bugs finds!

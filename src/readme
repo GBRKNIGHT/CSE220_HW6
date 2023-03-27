@@ -1,0 +1,9 @@
+As 13:38 at Mar 27, there are 3 wildcard remained to debug
+but those are very tough, considering Friday is the test,
+I decide to concentrare on that. 
+Those 3 bugs is tough because it need restructure, the easiest way I can imagine is to 
+find all punctuations and replace it with space. After changed, replace the punctuaton again. 
+
+But previously, I classified by using space, I should mention this before too late. 
+
+So I decide to end here, hope it can earn an average grade. 
