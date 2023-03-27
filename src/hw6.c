@@ -677,16 +677,11 @@ int main(int argc, char **argv)
                     end = pos + strlen(real_sname) - string;
                     int fr_ptr = 0;
                     int entered_here = 0;
-                    
-                    while((((isspace(pos[fr_ptr]) == 0)|| (pos[fr_ptr]) == '\n' ))
-                            && ((isspace(pos[fr_ptr + 1])) || (pos[fr_ptr + 1]) == '\n' ))
+                    printf("!%c ! ", pos[fr_ptr + 2]);
+                    while(((isspace(pos[fr_ptr + 2]) != 0)&& (pos[fr_ptr+ 2]) != '\n' ))
                     // while((isspace(*(pos+fr_ptr)) == 0 ) && (ispunct(*(pos+fr_ptr)) == 0)) 
                     {
-                        printf("gfds\n");
                         entered_here = 1;
-                        // if(ispunct(pos + fr_ptr + 1)){
-
-                        // }
                         fr_ptr--;
                         /* code */
                     }
