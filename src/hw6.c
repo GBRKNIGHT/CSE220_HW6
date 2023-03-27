@@ -619,7 +619,6 @@ int main(int argc, char **argv)
                 printf("%ld ", pos-string);
                 int start_match = 0;
                 if((pos - string == 0) && back_flag){
-
                     int first_space = 0;
                     int loop_counter = 0;
                     while(isspace(string[first_space]) == 0){
@@ -629,7 +628,6 @@ int main(int argc, char **argv)
                     }
                     start_match = 1;
                     strcpy(temp, string);
-
                     // Index of current found word
                     index = pos - string;
 
@@ -647,7 +645,8 @@ int main(int argc, char **argv)
                 }
                 int is_space_pos_one  = isspace(*(pos-1));
                 int is_punc_pos_one = ispunct(*(pos-1));
-                
+                int is_line_change_pos_one = (*(pos-1) == '\n');
+                int is_EOF_pos_one = (*(pos-1) == EOF);
                
                 
 
@@ -658,9 +657,13 @@ int main(int argc, char **argv)
                 
                 if (front_flag)
                 {
+                    printf("%s \n", string);
+                    printf("%d \n", (string[strlen(string)]));
                     // if this is front* and previous is space or punctuation (space or punct)
                     // and the char next to the string is not a space and not punct
-                    if (((is_space_pos_one) || (is_punc_pos_one)) || ((isspace(*(pos+strlen(real_sname))) == 0) && (ispunct(*(pos+strlen(real_sname))) == 0)))
+                    if (((is_space_pos_one) || (is_punc_pos_one)) || (is_line_change_pos_one)|| (is_EOF_pos_one)
+                        ||(((isspace(*(pos+strlen(real_sname))) == 0) && (ispunct(*(pos+strlen(real_sname))) == 0)) 
+                            && (((*(pos+strlen(real_sname)))!='\n')&& ((*(pos+strlen(real_sname)))!= NULL))) )
                     {
                         printf(" string %s \n", string);
                         index = pos - string + 1; 
@@ -895,7 +898,9 @@ int main(int argc, char **argv)
 
                 if (front_flag)
                 {
-                    if (((is_space_pos_one) || (is_punc_pos_one)) || ((isspace(*(pos+strlen(real_sname))) == 0) && (ispunct(*(pos+strlen(real_sname))) == 0)))
+                    if (((is_space_pos_one) || (is_punc_pos_one)) 
+                        ||(((isspace(*(pos+strlen(real_sname))) == 0) && (ispunct(*(pos+strlen(real_sname))) == 0)) 
+                            && (((*(pos+strlen(real_sname)))!='\n')&& ((*(pos+strlen(real_sname)))!= NULL))) )
                     {
                         printf(" string %s \n", string);
                         index = pos - string + 1; 
