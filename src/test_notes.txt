@@ -10,3 +10,5 @@ bin/hw6 -w -s Tur* -r TURING\ THE\ GREAT tests.in/wildcard_search07.in.txt tests
 text for wildcard_search07
 bin/hw6 -s Hom* -r This\ homework\ is\ effortless. -w tests.in/wildcard_search08.in.txt tests.out/STUPID.txt
 text for wildcard_search08
+bin/hw6 -s *re -w -r New\ York tests.in/wildcard_search13.in.txt tests.out/STUPID.txt
+text for wildcard_search13

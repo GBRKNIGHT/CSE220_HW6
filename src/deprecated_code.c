@@ -360,3 +360,25 @@
                 // //     temp_optarg[l] = optarg[l+1];
                 // // }
                 // // 4. add to rname
+
+
+
+
+
+
+                // end = pos + strlen(real_sname) - string;
+                //     int fr_ptr = 0;
+                //     int entered_here = 0;
+                //     while((((isspace(pos[fr_ptr]) == 0)|| (pos[fr_ptr]) == '\n' ))
+                //             && ((isspace(pos[fr_ptr + 1])) || (pos[fr_ptr + 1]) == '\n' ))
+                //     // while((isspace(*(pos+fr_ptr)) == 0 ) && (ispunct(*(pos+fr_ptr)) == 0)) 
+                //     {
+                //         printf("gfds\n");
+                //         entered_here = 1;
+                //         // if(ispunct(pos + fr_ptr + 1)){
+
+                //         // }
+                //         fr_ptr--;
+                //         /* code */
+                //     }
+                //     begin = fr_ptr + end - 1;
