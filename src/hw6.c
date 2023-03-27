@@ -725,7 +725,7 @@ int main(int argc, char **argv)
                     // oldword found index.
                     strcat(string, temp + index + old_length);
 
-                    index = end + 1;
+                    index = begin + strlen(rname);
                 }
 
 
