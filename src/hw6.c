@@ -678,7 +678,7 @@ int main(int argc, char **argv)
                     // if this is front* and previous is space or punctuation (space or punct)
                     // and the char next to the string is not a space and not punct
                     
-                    if((((is_line_change_pos_one)|| (is_EOF_pos_one))
+                    if((( (is_line_change_pos_one)|| (is_EOF_pos_one))
                         ||(((isspace(*(pos+strlen(real_sname))) == 0) && (ispunct(*(pos+strlen(real_sname))) == 0)) 
                             && (((*(pos+strlen(real_sname)))!='\n')&& ((*(pos+strlen(real_sname)))!= NULL))) ))
                     {
@@ -926,8 +926,7 @@ int main(int argc, char **argv)
 
                 if (front_flag)
                 {
-                    if (((is_space_pos_one)) 
-                        ||(((isspace(*(pos+strlen(real_sname))) == 0) && (ispunct(*(pos+strlen(real_sname))) == 0)) 
+                    if ( (((isspace(*(pos+strlen(real_sname))) == 0) && (ispunct(*(pos+strlen(real_sname))) == 0)) 
                             && (((*(pos+strlen(real_sname)))!='\n')&& ((*(pos+strlen(real_sname)))!= NULL))) )
                     {
                         // printf(" string %s \n", string);
