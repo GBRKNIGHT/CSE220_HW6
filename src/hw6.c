@@ -677,12 +677,15 @@ int main(int argc, char **argv)
                     // printf("%d \n", (string[strlen(string)]));
                     // if this is front* and previous is space or punctuation (space or punct)
                     // and the char next to the string is not a space and not punct
-                    if (((is_space_pos_one) || (is_line_change_pos_one)|| (is_EOF_pos_one))
+                    
+                    if((((is_line_change_pos_one)|| (is_EOF_pos_one))
                         ||(((isspace(*(pos+strlen(real_sname))) == 0) && (ispunct(*(pos+strlen(real_sname))) == 0)) 
-                            && (((*(pos+strlen(real_sname)))!='\n')&& ((*(pos+strlen(real_sname)))!= NULL))) )
+                            && (((*(pos+strlen(real_sname)))!='\n')&& ((*(pos+strlen(real_sname)))!= NULL))) ))
                     {
-                        // printf("I AM HERE \n");
-                        printf("%s \n", string);
+                        
+                        printf("I AM HERE \n");
+                        printf("%s \n", real_sname);
+                        // printf("%s \n", string);
                         // printf(" string %s \n", string);
                         index = pos - string + 1; 
                         continue;
@@ -694,7 +697,6 @@ int main(int argc, char **argv)
                     while(((pos+fr_ptr-1) >= string) && (((ispunct(*(pos+fr_ptr-1)) == 0)) && (isspace(*(pos+fr_ptr-1)) == 0)))
                     // while((isspace(*(pos+fr_ptr)) == 0 ) && (ispunct(*(pos+fr_ptr)) == 0)) 
                     {
-                        printf("%s \n", real_sname);
                         entered_here = 1;
                         if(ispunct(*(pos+fr_ptr))){
                             // char save_char[2];
@@ -961,7 +963,7 @@ int main(int argc, char **argv)
                     // oldword found index.
                     strcat(string, temp + index + old_length);
 
-                    index = end + 1;
+                    index = begin + strlen(rname);
                 }
 
                 char save_char_MANCHESTER[2];

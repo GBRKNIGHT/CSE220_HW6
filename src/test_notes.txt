@@ -16,3 +16,5 @@ bin/hw6 -w -s *ork -r This\ homework\ is\ effortless. tests.in/wildcard_search19
 text for wildcard_search19   replace over and over again. 
 bin/hw6 -s *So -r \ Therefore, -w tests.in/wildcard_search21.in.txt tests.out/STUPID.txt
 text for wildcard_search21 
+bin/hw6 -s *with -w -r WITH tests.in/wildcard_search23.in.txt tests.out/STUPID.txt
+text for wildcard_search2
